@@ -69,7 +69,7 @@ public class DonationFormController {
         stage.centerOnScreen();
     }
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         loadAllDonations();
         loadAllDonors();
@@ -85,7 +85,7 @@ public class DonationFormController {
         colHemoglobinLevel.setCellValueFactory(new PropertyValueFactory<>("Hemoglobin_level"));
     }
 
-    public void loadAllDonations() {
+    public void loadAllDonations() throws ClassNotFoundException {
         var model = new DonationModel();
 
         ObservableList<DonationTm> obList = FXCollections.observableArrayList();
@@ -110,7 +110,7 @@ public class DonationFormController {
     }
 
     @FXML
-    public void btnDeleteOnAction(ActionEvent actionEvent) {
+    public void btnDeleteOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String do_id = txtDoId.getText();
         var model = new DonationModel();
 
@@ -139,7 +139,7 @@ public class DonationFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent actionEvent) {
+    void btnSaveOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String do_id = txtDoId.getText();
         String d_id = String.valueOf(cmbDonorid.getValue());
         Date date = Date.valueOf(txtDate.getValue());
@@ -165,7 +165,7 @@ public class DonationFormController {
     }
 
     @FXML
-    public void btnSearchOnAction(ActionEvent actionEvent) {
+    public void btnSearchOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
 
         String do_id = txtDoId.getText();
         var model = new DonationModel();
@@ -209,7 +209,7 @@ public class DonationFormController {
         return true;
     }
 
-    private void loadAllDonors() throws SQLException {
+    private void loadAllDonors() throws SQLException, ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
             List<DonorDto> donList = DonorModel.loadAllDonors();

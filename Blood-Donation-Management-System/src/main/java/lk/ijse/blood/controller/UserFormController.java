@@ -47,7 +47,12 @@ public class UserFormController {
         var model = new AdminModel();
 
         try {
-            boolean isSaved = model.saveUser(dto);
+            boolean isSaved = false;
+            try {
+                isSaved = model.saveUser(dto);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "User Register Succesfull").show();
                 clearFields();

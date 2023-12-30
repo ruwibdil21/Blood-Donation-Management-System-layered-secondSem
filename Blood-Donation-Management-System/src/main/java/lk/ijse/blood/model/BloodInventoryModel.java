@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.dto.DonationDto;
@@ -13,79 +14,43 @@ import java.util.List;
 
 public class BloodInventoryModel {
 
-    public BloodInventoryDto searchBloodInventory(String bloodBagId)throws SQLException {
+    public BloodInventoryDto searchBloodInventory(String bloodBagId) throws SQLException, ClassNotFoundException {
 
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT * FROM blood_inventory WHERE  BloodBag_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1,bloodBagId);
-
-        ResultSet resultSet = statement.executeQuery();
-        BloodInventoryDto dto = null;
+        ResultSet resultSet = SQLUtil.execute( "SELECT * FROM blood_inventory WHERE  BloodBag_id = ?",bloodBagId);
 
         if (resultSet.next()){
-            String bloodBag_id= resultSet.getString(1);
-            String donation_id = resultSet.getString(2);
-            String donation_date = resultSet.getString(3);
-            String ex_date = resultSet.getString(4);
-            String blood_type = resultSet.getString(5);
+            return new BloodInventoryDto(
+            resultSet.getString(1),
+            resultSet.getString(2),
+            resultSet.getString(3),
+            resultSet.getString(4),
+            resultSet.getString(5));
 
-            dto = new BloodInventoryDto(bloodBag_id,donation_id,donation_date,ex_date,blood_type);
         }
-        return dto;
+        return null;
     }
 
 
-    public boolean isDeleteBloodInventory(String BloodBag_id) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean isDeleteBloodInventory(String BloodBag_id) throws SQLException, ClassNotFoundException {
 
-        String sql = "DELETE FROM blood_inventory WHERE  BloodBag_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1,BloodBag_id);
-        return statement.executeUpdate() > 0;
+        return SQLUtil.execute("DELETE FROM blood_inventory WHERE  BloodBag_id = ?",BloodBag_id);
     }
 
 
-    public static boolean saveBloodInventory(BloodInventoryDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public static boolean saveBloodInventory(BloodInventoryDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into blood_inventory values (?,?,?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, dto.getBloodBagId());
-        statement.setString(2, dto.getDonation_id());
-        statement.setString(3, dto.getDonation_date());
-        statement.setString(4, dto.getEx_date());
-        statement.setString(5, dto.getBlood_type());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
+        return SQLUtil.execute( "insert into blood_inventory values (?,?,?,?,?)",dto.getBloodBagId(),dto.getDonation_id(),dto.getDonation_date(),dto.getEx_date(),dto.getBlood_type());
     }
 
-    public boolean updateBloodInventory(BloodInventoryDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean updateBloodInventory(BloodInventoryDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "UPDATE blood_inventory SET Donation_id = ?, Donation_date= ?,Ex_date = ?,Blood_type = ? ,WHERE  BloodBag_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, dto.getDonation_id());
-        statement.setString(2, dto.getDonation_date());
-        statement.setString(3, dto.getEx_date());
-        statement.setString(4, dto.getBlood_type());
-        statement.setString(5, dto.getBloodBagId());
-
-
-        return statement.executeUpdate() > 0;
+        return SQLUtil.execute("UPDATE blood_inventory SET Donation_id = ?, Donation_date= ?,Ex_date = ?,Blood_type = ? ,WHERE  BloodBag_id = ?",dto.getDonation_id(),dto.getDonation_date(),dto.getEx_date(),dto.getBlood_type(),dto.getBloodBagId());
     }
 
 
-    public List<BloodInventoryDto> loadAllBloodInventorys() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public List<BloodInventoryDto> loadAllBloodInventorys() throws SQLException, ClassNotFoundException {
 
-        String sql = "SELECT * FROM blood_inventory ";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
+        ResultSet resultSet = SQLUtil.execute( "SELECT * FROM blood_inventory ");
         List<BloodInventoryDto> bloodInventoryList = new ArrayList<>();
 
         while (resultSet.next()) {

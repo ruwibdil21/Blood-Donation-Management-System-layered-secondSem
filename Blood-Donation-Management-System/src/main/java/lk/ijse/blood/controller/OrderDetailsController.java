@@ -72,7 +72,7 @@ public class OrderDetailsController {
 
     @FXML
     private TextField txtOrderid;
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         //loadAllOrderDetails();
         autoGenarateInventoryId();
@@ -117,7 +117,7 @@ public class OrderDetailsController {
         }
     }*/
 
-    public void btnSaveOnAction(ActionEvent actionEvent) {
+    public void btnSaveOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String supOder_id = txtOrderid.getText();
         String med_id = txtMedid.getText();
         String sup_id = String.valueOf(cmbSup_id.getValue());
@@ -167,7 +167,7 @@ public class OrderDetailsController {
         txtDecription.setText("");
     }
 
-    private void loadAllSuppliers(){
+    private void loadAllSuppliers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
             List<SupplierDto> supList = SupplierModel.loadAllSuppliers();

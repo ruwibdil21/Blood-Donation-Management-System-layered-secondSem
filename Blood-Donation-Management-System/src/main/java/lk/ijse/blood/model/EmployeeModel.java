@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonationDto;
 import lk.ijse.blood.dto.EmployeeDto;
@@ -12,38 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeModel {
-    public boolean saveEmployee(EmployeeDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean saveEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute( "insert into employee values (?,?,?,?,?,?)",dto.getEmp_id(),dto.getUser_id(),dto.getName(),dto.getAddress(),dto.getRole(),dto.getDOB());
 
-        String sql = "insert into employee values (?,?,?,?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, dto.getEmp_id());
-        statement.setString(2, dto.getUser_id());
-        statement.setString(3, dto.getName());
-        statement.setString(4, dto.getAddress());
-        statement.setString(5, dto.getRole());
-        statement.setDate(6, dto.getDOB());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
     }
 
 
-    public boolean deleteEmployee(String id) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean deleteEmployee(String id) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute( "DELETE FROM employee WHERE Emp_id = ?",id);
 
-        String sql = "DELETE FROM employee WHERE Emp_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, id);
-        return statement.executeUpdate() > 0;
     }
 
-    public List<EmployeeDto> loadAllEmployees()throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public List<EmployeeDto> loadAllEmployees() throws SQLException, ClassNotFoundException {
 
-        String sql = "SELECT * FROM employee ";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM employee ");
 
         List<EmployeeDto> employeeList= new ArrayList<>();
 

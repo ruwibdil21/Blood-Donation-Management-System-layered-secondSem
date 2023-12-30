@@ -63,7 +63,7 @@ public class SalaryFormController {
     @FXML
     private TextField txtYear;
 
-    public void initialize() {
+    public void initialize() throws ClassNotFoundException {
         setCellValueFactory();
         loadAllSalarys();
 
@@ -78,7 +78,7 @@ public class SalaryFormController {
 
     }
 
-    public void loadAllSalarys() {
+    public void loadAllSalarys() throws ClassNotFoundException {
         var model = new SalaryModel();
 
         ObservableList<SalaryTm> obList = FXCollections.observableArrayList();
@@ -103,7 +103,7 @@ public class SalaryFormController {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String salaryId = txtSalaryId.getText();
         var model = new SalaryModel();
 
@@ -135,7 +135,7 @@ public class SalaryFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String salaryId = txtSalaryId.getText();
         String emp_id = txtEmpId.getText();
         int amount = Integer.parseInt(txtAmount.getText());
@@ -162,7 +162,7 @@ public class SalaryFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String salaryId = txtSalaryId.getText();
         String empId = txtEmpId.getText();
         Integer amount = valueOf(txtAmount.getText());

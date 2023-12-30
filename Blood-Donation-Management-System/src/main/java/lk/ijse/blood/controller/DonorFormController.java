@@ -64,7 +64,7 @@ public class DonorFormController {
     @FXML
     private TextField txtType;
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         loadAllDonors();
         autoGenarateId();
@@ -87,7 +87,7 @@ public class DonorFormController {
         colType.setCellValueFactory(new PropertyValueFactory<>("blood_type"));
     }
 
-    private void loadAllDonors() {
+    private void loadAllDonors() throws ClassNotFoundException {
         var model = new DonorModel();
 
         ObservableList<DonorTm> obList = FXCollections.observableArrayList();
@@ -109,7 +109,7 @@ public class DonorFormController {
         }
     }
 
-    public void btnSearchOnAction(ActionEvent actionEvent) {
+    public void btnSearchOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String d_id = txtId.getText();
         var model = new DonorModel();
 
@@ -135,7 +135,7 @@ public class DonorFormController {
         txtType.setText(dto.getType());
     }
 
-    public void btnDeleteOnAction(ActionEvent actionEvent) {
+    public void btnDeleteOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String d_id = txtId.getText();
         var model = new DonorModel();
 
@@ -157,7 +157,7 @@ public class DonorFormController {
         }
     }
 
-    public void btnUpdateOnAction(ActionEvent actionEvent) {
+    public void btnUpdateOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String d_id = txtId.getText();
         String firstName = txtFirstName.getText();
         String lastName = txtLastName.getText();
@@ -183,7 +183,7 @@ public class DonorFormController {
         }
     }
 
-    public void btnSaveOnAction(ActionEvent actionEvent) {
+    public void btnSaveOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String d_id = txtId.getText();
         String firstName = txtFirstName.getText();
         String lastName = txtLastName.getText();

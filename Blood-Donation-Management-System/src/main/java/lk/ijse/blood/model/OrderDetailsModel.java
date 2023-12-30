@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailsModel {
-    public static boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException {
+    public static boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException, ClassNotFoundException {
         Connection connection = DbConnection.getInstance().getConnection();
 
         try {
@@ -35,18 +36,10 @@ public class OrderDetailsModel {
         }
     }
 
-    public static boolean saveOrderDetails(OrderDetailsDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public static boolean saveOrderDetails(OrderDetailsDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into order_details values (?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+        return SQLUtil.execute( "insert into order_details values (?,?,?)",dto.getOrder_id(),dto.getMed_id(),dto.getDescription());
 
-        statement.setString(1, dto.getOrder_id());
-        statement.setString(2, dto.getMed_id());
-        statement.setString(3, dto.getDescription());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
     }
 
    /* public static List<OrderDetailsDto> loadAllOrderDetails() throws SQLException {

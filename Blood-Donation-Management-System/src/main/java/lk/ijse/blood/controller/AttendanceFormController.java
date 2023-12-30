@@ -51,7 +51,7 @@ public class AttendanceFormController {
     @FXML
     private TextField txtStatus;
 
-    public void initialize() {
+    public void initialize() throws ClassNotFoundException {
         loadAllAttendans();
         setCellValueFactory();
     }
@@ -63,7 +63,7 @@ public class AttendanceFormController {
 
     }
 
-    public void loadAllAttendans(){
+    public void loadAllAttendans() throws ClassNotFoundException {
         var model = new AttendanceModel();
 
         ObservableList<AttendanceTm> obList = FXCollections.observableArrayList();
@@ -88,7 +88,7 @@ public class AttendanceFormController {
     }
 
     @FXML
-    void btnSearchOnAction(ActionEvent actionEvent) {
+    void btnSearchOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String att_id = txtAttId.getText();
         var model = new AttendanceModel();
 
@@ -108,7 +108,7 @@ public class AttendanceFormController {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String attId= txtAttId.getText();
         var model = new AttendanceModel();
 
@@ -138,7 +138,7 @@ public class AttendanceFormController {
 
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String att_Id = txtAttId.getText();
         String emp_id = txtEmpId.getText();
         String date = String.valueOf(DtpDate.getValue());
@@ -165,7 +165,7 @@ public class AttendanceFormController {
 
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String att_Id = txtAttId.getText();
         String empId = txtEmpId.getText();
         String date = String.valueOf(DtpDate.getValue());

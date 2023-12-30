@@ -46,7 +46,7 @@ public class SupplierOrderFormController {
     @FXML
     private TextField txtSupplierId;
 
-    public void initialize() {
+    public void initialize() throws ClassNotFoundException {
         loadAllSupplierOrders();
         setCellValueFactory();
     }
@@ -58,7 +58,7 @@ public class SupplierOrderFormController {
 
     }
 
-    public void loadAllSupplierOrders(){
+    public void loadAllSupplierOrders() throws ClassNotFoundException {
         var model = new SupplierOrderModel();
 
         ObservableList<SupplierOrdersTm> obList = FXCollections.observableArrayList();
@@ -83,7 +83,7 @@ public class SupplierOrderFormController {
 
 
     @FXML
-    public void btnDeleteOnAction(ActionEvent event) {
+    public void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String supplier_id = txtSupplierId.getText();
         var model = new SupplierOrderModel();
 
@@ -108,7 +108,7 @@ public class SupplierOrderFormController {
 
 
     @FXML
-    public void btnSaveOnAction(ActionEvent event) {
+    public void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String order_id = txtOrderId.getText();
         String supplier_id = txtSupplierId.getText();
         String date = txtDate.getText();

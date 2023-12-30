@@ -75,7 +75,7 @@ public class NeederFormController {
     private TextField txtNeederId;
 
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         loadAllNeeders();
         setCellValueFactory();
         loadAllUsers();
@@ -101,7 +101,7 @@ public class NeederFormController {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("Email"));
     }
 
-    public void loadAllNeeders() throws SQLException {
+    public void loadAllNeeders() throws SQLException, ClassNotFoundException {
         var model = new NeederModel();
 
         ObservableList<NeederTm> obList = FXCollections.observableArrayList();

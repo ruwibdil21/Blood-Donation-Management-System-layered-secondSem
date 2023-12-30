@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.dto.NeederRequestDto;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class NeederRequestModel {
 
-    public static boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto,RequestDetailsDto requestDetailsDto) throws SQLException {
+    public static boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto,RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException {
         Connection connection = DbConnection.getInstance().getConnection();
 
         try {
@@ -38,78 +39,42 @@ public class NeederRequestModel {
         }
     }
 
-    public boolean updateNeederRequest(NeederRequestDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean updateNeederRequest(NeederRequestDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "UPDATE needer_Request SET Needer_id = ?, Date = ?,Amount = ?, WHERE Request_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, dto.getNeeReq_id());
-        statement.setString(2, dto.getNeederId());
-        statement.setString(3, dto.getDate());
-        statement.setString(4, dto.getAmount());
-
-
-        return statement.executeUpdate() > 0;
+        return SQLUtil.execute( "UPDATE needer_Request SET Needer_id = ?, Date = ?,Amount = ?, WHERE Request_id = ?",dto.getNeeReq_id(),dto.getNeederId(),dto.getDate(),dto.getAmount());
     }
 
 
-    public static boolean saveNeederRequest(NeederRequestDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public static boolean saveNeederRequest(NeederRequestDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into needer_request values (?,?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+       return SQLUtil.execute( "insert into needer_request values (?,?,?,?)",dto.getNeeReq_id(),dto.getNeederId(),dto.getDate(),dto.getAmount());
 
-        statement.setString(1, dto.getNeeReq_id());
-        statement.setString(2, dto.getNeederId());
-        statement.setString(3, dto.getDate());
-        statement.setString(4, dto.getAmount());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
     }
 
 
-    public NeederRequestDto searchNeeReq(String txtNeeReq) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public NeederRequestDto searchNeeReq(String txtNeeReq) throws SQLException, ClassNotFoundException {
 
-        String sql = "SELECT * FROM needer_Request WHERE NeeReq = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, txtNeeReq);
-
-        ResultSet resultSet = statement.executeQuery();
-        NeederRequestDto dto = null;
+        ResultSet resultSet =SQLUtil.execute( "SELECT * FROM needer_Request WHERE NeeReq = ?",txtNeeReq);
 
         if (resultSet.next()) {
-            String neeReq = resultSet.getString(1);
-            String neederId = resultSet.getString(2);
-            String date = resultSet.getString(3);
-            String amount = resultSet.getString(4);
+            return new NeederRequestDto(
+            resultSet.getString(1),
+            resultSet.getString(2),
+            resultSet.getString(3),
+            resultSet.getString(4));
 
-
-            dto = new NeederRequestDto(neeReq, neederId, date, amount);
         }
-        return dto;
+        return null;
     }
 
 
 
-    public boolean deleteNeederRequest(String neeReq) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "DELETE FROM needer_Request WHERE Request_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, neeReq);
-        return statement.executeUpdate() > 0;
+    public boolean deleteNeederRequest(String neeReq) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute( "DELETE FROM needer_Request WHERE Request_id = ?",neeReq);
     }
 
-    public List<NeederRequestDto> loadAllNeederRequests() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT * FROM needer_Request";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
+    public List<NeederRequestDto> loadAllNeederRequests() throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM needer_Request");
         List<NeederRequestDto> neederREquestList = new ArrayList<>();
 
         while (resultSet.next()) {

@@ -66,7 +66,7 @@ public class SupplierFormController {
     @FXML
     private TextField txtTel;
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         loadAllSuppliers();
         setCellValueFactory();
         loadAllUsers();
@@ -92,7 +92,7 @@ public class SupplierFormController {
 
     }
 
-    public void loadAllSuppliers() {
+    public void loadAllSuppliers() throws ClassNotFoundException {
         var model = new SupplierModel();
 
         ObservableList<SupplierTm> obList = FXCollections.observableArrayList();
@@ -119,7 +119,7 @@ public class SupplierFormController {
 
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String supId = txtSupId.getText();
         var model = new SupplierModel();
 
@@ -169,7 +169,7 @@ public class SupplierFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String supId = txtSupId.getText();
         String userId = String.valueOf(cmbUserid.getValue());
         String name = txtName.getText();
@@ -218,7 +218,7 @@ public class SupplierFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent actionEvent) {
+    void btnUpdateOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
             String supId = txtSupId.getText();
             String userId = String.valueOf(cmbUserid.getValue());
             String name = txtName.getText();

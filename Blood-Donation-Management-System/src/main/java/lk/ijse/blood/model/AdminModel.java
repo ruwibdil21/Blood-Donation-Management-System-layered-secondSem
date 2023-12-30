@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.UserDto;
 
@@ -12,11 +13,13 @@ import java.util.List;
 
 public class AdminModel {
     public static List<UserDto> loadAllUsers() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
 
-        String sql = "SELECT * FROM user";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
+        ResultSet resultSet = null;
+        try {
+            resultSet = SQLUtil.execute("SELECT * FROM user");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         List<UserDto> userList = new ArrayList<>();
 
         while (resultSet.next()) {
@@ -29,30 +32,13 @@ public class AdminModel {
         return userList;
     }
 
-    public boolean loginAdmin(String id, String password) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT * FROM user WHERE User_id =? AND Password = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, id);
-        statement.setString(2, password);
-
-        ResultSet resultSet = statement.executeQuery();
+    public boolean loginAdmin(String id, String password) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM user WHERE User_id =? AND Password = ?",id,password);
         return resultSet.next();
     }
 
-    public boolean saveUser(UserDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean saveUser(UserDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into user values (?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, dto.getUser_id());
-        statement.setString(2, dto.getName());
-        statement.setString(3, dto.getPassword());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
+        return SQLUtil.execute( "insert into user values (?,?,?)",dto.getUser_id(),dto.getName(),dto.getPassword());
     }
 }

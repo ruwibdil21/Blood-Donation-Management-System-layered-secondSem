@@ -43,7 +43,7 @@ public class RequestDetailsFormController {
     private TextField txtNeederId;
 
 
-    public void initialize() {
+    public void initialize() throws ClassNotFoundException {
         loadAllRequestDetails();
         setCellValueFactory();
     }
@@ -54,7 +54,7 @@ public class RequestDetailsFormController {
 
     }
 
-    public void loadAllRequestDetails(){
+    public void loadAllRequestDetails() throws ClassNotFoundException {
         var model = new RequestDetailsModel();
 
         ObservableList<RequestDetailsTm> obList = FXCollections.observableArrayList();
@@ -77,14 +77,14 @@ public class RequestDetailsFormController {
     }
 
     @FXML
-    public void btnDeleteOnAction(ActionEvent event){
+    public void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
             String Needer_id = txtNeederId.getText();
             var model = new RequestDetailsModel();
 
             try{
                 var requestDetailsModel = new RequestDetailsModel();
 
-                DonorDto dto =model.searchRequestDetails(Needer_id);
+                RequestDetailsDto dto =model.searchRequestDetails(Needer_id);
                 if(dto != null) {
                     boolean isDeleted = model.deleteRequestDetails(Needer_id);
                     if (isDeleted) {
@@ -104,7 +104,7 @@ public class RequestDetailsFormController {
 
 
     @FXML
-    public void btnSaveOnAction(ActionEvent event)  {
+    public void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String needer_id = txtNeederId.getText();
         String bloodbag_id = txtBloodBagId.getText();
         String description = txtDescription.getText();

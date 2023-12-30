@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.AttendanceDto;
 import lk.ijse.blood.dto.SalaryDto;
@@ -13,12 +14,9 @@ import java.util.List;
 
 public class AttendanceModel {
 
-    public List<AttendanceDto> loadAllAttendans()throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public List<AttendanceDto> loadAllAttendans() throws SQLException, ClassNotFoundException {
 
-        String sql = "SELECT * FROM attendance";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendance");
         List<AttendanceDto> attendanceList= new ArrayList<>();
 
         while (resultSet.next()) {
@@ -28,8 +26,6 @@ public class AttendanceModel {
                     resultSet.getString(3),
                     resultSet.getString(4)
 
-
-
             ));
         }
 
@@ -38,69 +34,54 @@ public class AttendanceModel {
 
 
 
-    public boolean deleteAttendance(String attId)throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "DELETE FROM attendance WHERE Att_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, attId);
-        return statement.executeUpdate() > 0;
+    public boolean deleteAttendance(String attId) throws SQLException, ClassNotFoundException {
+//        Connection connection = DbConnection.getInstance().getConnection();
+//
+//        String sql = "DELETE FROM attendance WHERE Att_id = ?";
+//        PreparedStatement statement = connection.prepareStatement(sql);
+//
+//        statement.setString(1, attId);
+//        return statement.executeUpdate() > 0;
+        return SQLUtil.execute("DELETE FROM attendance WHERE Att_id = ?",attId);
     }
 
 
 
 
-    public AttendanceDto searchAttendance(String attId)throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public AttendanceDto searchAttendance(String attId) throws SQLException, ClassNotFoundException {
+       /* Connection connection = DbConnection.getInstance().getConnection();
 
         String sql = "SELECT * FROM attendance WHERE Att_id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, attId);
+        statement.setString(1, attId);*/
 
-        ResultSet resultSet = statement.executeQuery();
-        AttendanceDto dto = null;
+        ResultSet resultSet = SQLUtil.execute( "SELECT * FROM attendance WHERE Att_id = ?");
+
 
         if (resultSet.next()){
-            String att_id = resultSet.getString(1);
-            String employee_id = resultSet.getString(2);
-            String date = resultSet.getString(3);
-            String status = resultSet.getString(4);
+            return new AttendanceDto(
+             resultSet.getString(1),
+             resultSet.getString(2),
+             resultSet.getString(3),
+             resultSet.getString(4)
+             );
 
-            dto = new AttendanceDto(att_id,employee_id,date,status);
         }
-        return dto;
+        return null;
     }
 
 
-    public boolean saveAttendance(AttendanceDto dto) throws  SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean saveAttendance(AttendanceDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into attendance values (?,?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+       return SQLUtil.execute( "insert into attendance values (?,?,?,?)",dto.getAtt_id(),dto.getEmp_id(),dto.getDate(),dto.getStatus());
 
-        statement.setString(1, dto.getAtt_id());
-        statement.setString(2, dto.getEmp_id());
-        statement.setString(3, dto.getDate());
-        statement.setString(4, dto.getStatus());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
     }
 
 
-    public boolean updateAttendance(AttendanceDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean updateAttendance(AttendanceDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "UPDATE attendance SET Emp_id = ?, Date= ?, Status = ? WHERE Att_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
+        return SQLUtil.execute("UPDATE attendance SET Emp_id = ?, Date= ?, Status = ? WHERE Att_id = ?",dto.getEmp_id(),dto.getDate(),dto.getStatus(),dto.getAtt_id());
 
-        statement.setString(1, dto.getEmp_id());
-        statement.setString(2, dto.getDate());
-        statement.setString(3, dto.getStatus());
-        statement.setString(4, dto.getAtt_id());
-
-        return statement.executeUpdate() > 0;
     }
 }
 

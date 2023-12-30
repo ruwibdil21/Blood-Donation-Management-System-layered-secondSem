@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.SupplierOrdersDto;
 
@@ -12,60 +13,32 @@ import java.util.List;
 
 public class SupplierOrderModel {
 
-    public SupplierOrdersDto searchSupplierOrders(String supplierId) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public SupplierOrdersDto searchSupplierOrders(String supplierId) throws SQLException, ClassNotFoundException {
 
-        String sql = "SELECT * FROM supplier_orders WHERE Supplier_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, supplierId);
-
-        ResultSet resultSet = statement.executeQuery();
-        SupplierOrdersDto dto = null;
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM supplier_orders WHERE Supplier_id = ?",supplierId);
 
         if (resultSet.next()){
-            String order_id= resultSet.getString(1);
-            String supplier_id= resultSet.getString(2);
-            String date= resultSet.getString(3);
-            String amount = resultSet.getString(4);
-
-            dto = new SupplierOrdersDto(order_id,supplier_id,date,amount);
+            return new SupplierOrdersDto(
+                    resultSet.getString(1),
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getString(4));
 
         }
-        return dto;
+        return null;
     }
 
-    public boolean deleteSupplierOrder(String supplierId) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "DELETE FROM supplier_orders WHERE Supplier_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, supplierId);
-        return statement.executeUpdate() > 0;
+    public boolean deleteSupplierOrder(String supplierId) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("DELETE FROM supplier_orders WHERE Supplier_id = ?",supplierId);
     }
 
-    public static boolean saveSupplierOrders(SupplierOrdersDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public static boolean saveSupplierOrders(SupplierOrdersDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into supplier_orders values (?,?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, dto.getSupOrder_id());
-        statement.setString(2, dto.getSupplier_id());
-        statement.setString(3, dto.getDate());
-        statement.setString(4, dto.getAmount());
-
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
+        return SQLUtil.execute( "insert into supplier_orders values (?,?,?,?)",dto.getSupOrder_id(),dto.getSupplier_id(),dto.getDate(),dto.getAmount());
     }
 
-    public List<SupplierOrdersDto> loadAllSupplierOrders()throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT * FROM supplier_orders";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
+    public List<SupplierOrdersDto> loadAllSupplierOrders() throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM supplier_orders");
         List<SupplierOrdersDto> SupplierOrdersList= new ArrayList<>();
 
         while (resultSet.next()) {

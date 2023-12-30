@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.EmployeeDto;
 import lk.ijse.blood.dto.NeederDto;
@@ -12,55 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NeederModel {
-    public boolean saveNeeder(NeederDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean saveNeeder(NeederDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into needer values (?,?,?,?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+       return SQLUtil.execute( "insert into needer values (?,?,?,?,?,?)",dto.getNeederId(),dto.getUserId(),dto.getName(),dto.getAddress(),dto.getContact(),dto.getEmail());
 
-        statement.setString(1, dto.getNeederId());
-        statement.setString(2, dto.getUserId());
-        statement.setString(3, dto.getName());
-        statement.setString(4, dto.getAddress());
-        statement.setString(5, dto.getContact());
-        statement.setString(6, dto.getEmail());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
     }
 
-    public boolean updateNeeder(NeederDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean updateNeeder(NeederDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "UPDATE needer SET User_id = ?, Name = ?, Address = ?, Contact = ?, Email = ? WHERE Needer_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
+        return SQLUtil.execute( "UPDATE needer SET User_id = ?, Name = ?, Address = ?, Contact = ?, Email = ? WHERE Needer_id = ?",dto.getUserId(),dto.getName(),dto.getAddress(),dto.getContact(),dto.getEmail(),dto.getNeederId());
 
-        statement.setString(1, dto.getUserId());
-        statement.setString(2, dto.getName());
-        statement.setString(3, dto.getAddress());
-        statement.setString(4, dto.getContact());
-        statement.setString(5, dto.getEmail());
-        statement.setString(6, dto.getNeederId());
 
-        return statement.executeUpdate() > 0;
     }
 
-    public boolean deleteNeeder(String neederId) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean deleteNeeder(String neederId) throws SQLException, ClassNotFoundException {
 
-        String sql = "DELETE FROM needer WHERE Needer_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, neederId);
-        return statement.executeUpdate() > 0;
+        return SQLUtil.execute( "DELETE FROM needer WHERE Needer_id = ?",neederId);
     }
 
-    public static List<NeederDto> loadAllNeeders()throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public static List<NeederDto> loadAllNeeders() throws SQLException, ClassNotFoundException {
 
-        String sql = "SELECT * FROM needer ";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM needer ");
         List<NeederDto> neederList= new ArrayList<>();
 
         while (resultSet.next()) {

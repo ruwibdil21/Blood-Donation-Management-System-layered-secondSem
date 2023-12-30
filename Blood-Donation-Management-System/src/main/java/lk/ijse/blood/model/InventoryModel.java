@@ -1,5 +1,6 @@
 package lk.ijse.blood.model;
 
+import lk.ijse.blood.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.AttendanceDto;
 import lk.ijse.blood.dto.InventoryDto;
@@ -14,53 +15,24 @@ import java.util.List;
 
 public class InventoryModel {
 
-    public static boolean addInventory(InventoryDto dto) throws SQLException {
+    public static boolean addInventory(InventoryDto dto) throws SQLException, ClassNotFoundException {
         Connection connection = DbConnection.getInstance().getConnection();
 
-        String sql = "INSERT INTO medical_inventory VALUES (?,?,?)";
-        var statement = connection.prepareStatement(sql);
-
-        statement.setString(1,dto.getMedical_id());
-        statement.setString(2,dto.getBloodType());
-        statement.setString(3, String.valueOf(dto.getDate()));
-
-
-        return statement.executeUpdate() > 0;
+        return SQLUtil.execute( "INSERT INTO medical_inventory VALUES (?,?,?)",dto.getMedical_id(),dto.getBloodType(),dto.getDate());
     }
 
-    public static boolean saveInventory(InventoryDto dto) throws  SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public static boolean saveInventory(InventoryDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into medical_inventory values (?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        statement.setString(1, dto.getMedical_id());
-        statement.setString(2, dto.getDate());
-        statement.setString(3, dto.getBloodType());
-
-        boolean isSaved = statement.executeUpdate() > 0;
-        return isSaved;
+       return SQLUtil.execute("insert into medical_inventory values (?,?,?)",dto.getMedical_id(),dto.getDate(),dto.getBloodType());
     }
 
-    public boolean updateInventory(InventoryDto dto) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    public boolean updateInventory(InventoryDto dto) throws SQLException, ClassNotFoundException {
 
-        String sql = "UPDATE medical_inventory SET Blood_type = ?, Date = ? WHERE Med_id = ?";
-        var statement = connection.prepareStatement(sql);
-
-        statement.setString(3,dto.getMedical_id());
-        statement.setString(1,dto.getBloodType());
-        statement.setString(2, String.valueOf(dto.getDate()));
-
-
-        return statement.executeUpdate() > 0;
+        return SQLUtil.execute( "UPDATE medical_inventory SET Blood_type = ?, Date = ? WHERE Med_id = ?",dto.getMedical_id(),dto.getBloodType(),dto.getDate());
     }
 
-    public static List<InventoryDto> loadAllInventories()throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT * FROM medical_inventory ";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
+    public static List<InventoryDto> loadAllInventories() throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM medical_inventory ");
 
         List<InventoryDto> inventoryList= new ArrayList<>();
 

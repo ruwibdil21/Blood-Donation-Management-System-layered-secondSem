@@ -39,7 +39,7 @@ public class BloodInventoryFormController {
     private TableColumn<?, ?> colDonationDate;
 
 
-    public void initialize() {
+    public void initialize() throws ClassNotFoundException {
         loadAllBloodInvenorys();
         setCellValueFactory();
         try {
@@ -56,7 +56,7 @@ public class BloodInventoryFormController {
         colBlood_Type.setCellValueFactory(new PropertyValueFactory<>("blood_type"));
     }
 
-    public void loadAllBloodInvenorys(){
+    public void loadAllBloodInvenorys() throws ClassNotFoundException {
         var model = new BloodInventoryModel();
 
         ObservableList<BloodInventoryTm> obList = FXCollections.observableArrayList();
@@ -82,7 +82,7 @@ public class BloodInventoryFormController {
 
 
     @FXML
-   public void btnDeleteOnAction(ActionEvent event) {
+   public void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String bloodBag_id = txtBloodBag_id.getText();
         var model = new BloodInventoryModel();
 
@@ -105,7 +105,7 @@ public class BloodInventoryFormController {
 
 
     @FXML
-    public void btnSaveOnAction(ActionEvent event) {
+    public void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String bloodBagId = txtBloodBag_id.getText();
         String donationId = txtDonation_id.getText();
         String donationDate = String.valueOf(txtDonation_Date.getValue());
@@ -131,7 +131,7 @@ public class BloodInventoryFormController {
 
 
     @FXML
-    public void btnUpdateOnAction(ActionEvent event) {
+    public void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String bloodBagId = colBloodBag_id.getText();
         String donationId = txtDonation_id.getText();
         String donationDate = String.valueOf(txtDonation_Date.getValue());

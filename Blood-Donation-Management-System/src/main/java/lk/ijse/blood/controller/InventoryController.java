@@ -43,7 +43,7 @@ public class InventoryController {
     @FXML
     private TextField txtMedicalId;
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         loadAllInventories();
         setCellValueFactory();
     }
@@ -54,7 +54,7 @@ public class InventoryController {
         colBloodType.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
     }
 
-    public void loadAllInventories()throws SQLException {
+    public void loadAllInventories() throws SQLException, ClassNotFoundException {
         var model = new InventoryModel();
 
         ObservableList<InventoryTm> obList = FXCollections.observableArrayList();
@@ -87,7 +87,7 @@ public class InventoryController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String med_id = txtMedicalId.getText();
         String bloodType = txtBloodType.getText();
         String date = String.valueOf(txtDate.getValue());
@@ -118,7 +118,7 @@ public class InventoryController {
 
 
     @FXML
-    private void btnUpdateOnAction(ActionEvent event) {
+    private void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String medical_id = txtMedicalId.getText();
         String blood_type = txtBloodType.getText();
         String date = String.valueOf(txtDate.getValue());

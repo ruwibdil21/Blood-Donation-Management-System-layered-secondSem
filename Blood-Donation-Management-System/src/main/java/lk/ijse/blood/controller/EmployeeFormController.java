@@ -73,7 +73,7 @@ public class EmployeeFormController {
     @FXML
     private TextField txtRole;
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         loadAllEmployees();
         loadAllUsers();
@@ -89,7 +89,7 @@ public class EmployeeFormController {
         colRole.setCellValueFactory(new PropertyValueFactory<>("Role"));
     }
 
-    public void loadAllEmployees() {
+    public void loadAllEmployees() throws ClassNotFoundException {
         var model = new EmployeeModel();
 
         ObservableList<EmployeeTm> obList = FXCollections.observableArrayList();
@@ -127,7 +127,7 @@ public class EmployeeFormController {
 
 
     @FXML
-    public void btnSaveOnAction(ActionEvent actionEvent) {
+    public void btnSaveOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String emp_id = txtEmpId.getText();
         String user_id = String.valueOf(cmbUserid.getValue());
         String name = txtName.getText();

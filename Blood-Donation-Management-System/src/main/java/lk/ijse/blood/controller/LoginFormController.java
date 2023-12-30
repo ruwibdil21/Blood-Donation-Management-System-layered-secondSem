@@ -19,7 +19,7 @@ public class LoginFormController {
     public AnchorPane root;
 
     @FXML
-    void btnLoginOnAction(ActionEvent event) throws SQLException, IOException {
+    void btnLoginOnAction(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
         AdminModel adminModel = new AdminModel();
 
         boolean isValidAdmin = adminModel.loginAdmin(txtId.getText(),txtPassword.getText());

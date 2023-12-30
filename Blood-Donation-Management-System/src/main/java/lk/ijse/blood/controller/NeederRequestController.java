@@ -37,7 +37,7 @@ public class NeederRequestController {
     @FXML
     private TextField txtNeeReq;
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         autoGenerateRequestId();
         //autoGenerateBloodBagId();
         loadAllNeeder();
@@ -45,7 +45,7 @@ public class NeederRequestController {
         dtpDate.setValue(LocalDate.now());
     }
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String neeReq = txtNeeReq.getText();
         String blood_bag_id = txtBloodBagid.getText();
         String needer_id = String.valueOf(cmbNeederid.getValue());
@@ -84,7 +84,7 @@ public class NeederRequestController {
         dtpExdate.setValue(null);
     }
 
-    private void loadAllNeeder() {
+    private void loadAllNeeder() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
             List<NeederDto> needList = NeederModel.loadAllNeeders();
@@ -98,7 +98,7 @@ public class NeederRequestController {
         }
     }
 
-    private void loadAllDonation() {
+    private void loadAllDonation() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
             List<DonationDto> donList = DonationModel.loadAllDonations();
