@@ -1,4 +1,4 @@
-package lk.ijse.blood;
+package lk.ijse.blood.Util;
 
 import lk.ijse.blood.db.DbConnection;
 

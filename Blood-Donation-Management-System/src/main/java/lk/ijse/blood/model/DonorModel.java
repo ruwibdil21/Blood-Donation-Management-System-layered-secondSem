@@ -1,10 +1,7 @@
 package lk.ijse.blood.model;
 
-import lk.ijse.blood.SQLUtil;
-import lk.ijse.blood.db.DbConnection;
+import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.dto.DonorDto;
-import lk.ijse.blood.dto.RequestDetailsDto;
-import lk.ijse.blood.dto.tm.DonationTm;
 
 import java.sql.*;
 import java.util.ArrayList;

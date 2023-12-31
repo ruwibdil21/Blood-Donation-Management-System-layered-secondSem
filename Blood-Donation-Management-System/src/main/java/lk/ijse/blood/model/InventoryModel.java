@@ -1,13 +1,10 @@
 package lk.ijse.blood.model;
 
-import lk.ijse.blood.SQLUtil;
+import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.db.DbConnection;
-import lk.ijse.blood.dto.AttendanceDto;
 import lk.ijse.blood.dto.InventoryDto;
-import lk.ijse.blood.dto.NeederDto;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
