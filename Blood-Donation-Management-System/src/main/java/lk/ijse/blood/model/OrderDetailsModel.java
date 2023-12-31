@@ -1,6 +1,7 @@
 package lk.ijse.blood.model;
 
 import lk.ijse.blood.Util.SQLUtil;
+import lk.ijse.blood.Util.TransactionUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
 
@@ -9,26 +10,24 @@ import java.sql.SQLException;
 
 public class OrderDetailsModel {
     public static boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException, ClassNotFoundException {
-        Connection connection = DbConnection.getInstance().getConnection();
 
         try {
-            connection.setAutoCommit(false);
+            TransactionUtil.startTransaction();
             boolean isSupplierOrdersSaved = SupplierOrderModel.saveSupplierOrders(supplierOrdersDto);
             if (isSupplierOrdersSaved) {
                 boolean isInventorySaved = InventoryModel.saveInventory(inventoryDto);
                 if (isInventorySaved) {
                     boolean isOrderDetailsSaved = OrderDetailsModel.saveOrderDetails(orderDetailsDto);
                     if (isOrderDetailsSaved) {
-                        connection.commit();
                         return true;
                     }
                 }
-                connection.rollback();
+                TransactionUtil.rollBack();
                 return false;
-            } connection.rollback();
+            } TransactionUtil.rollBack();
             return false;
         }finally{
-            connection.setAutoCommit(true);
+           TransactionUtil.endTransaction();
         }
     }
 
