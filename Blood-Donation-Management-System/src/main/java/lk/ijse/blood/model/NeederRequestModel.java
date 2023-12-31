@@ -1,6 +1,7 @@
 package lk.ijse.blood.model;
 
 import lk.ijse.blood.Util.SQLUtil;
+import lk.ijse.blood.Util.TransactionUtil;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.dto.NeederRequestDto;
@@ -15,26 +16,23 @@ import java.util.List;
 public class NeederRequestModel {
 
     public static boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto,RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        try {
-            connection.setAutoCommit(false);
+       try {
+           TransactionUtil.startTransaction();
             boolean isNeederRequestSaved = NeederRequestModel.saveNeederRequest(neederRequestDto);
             if (isNeederRequestSaved) {
                 boolean isBloodInventorySaved = BloodInventoryModel.saveBloodInventory(bagdto);
                 if (isBloodInventorySaved) {
                     boolean isrequestDetailsSaved = RequestDetailsModel.saveRequestDetails(requestDetailsDto);
                     if (isrequestDetailsSaved) {
-                        connection.commit();
                         return true;
                     }
                 }
-                connection.rollback();
+               TransactionUtil.rollBack();
                 return false;
-            } connection.rollback();
+            }TransactionUtil.rollBack();
             return false;
         }finally{
-            connection.setAutoCommit(true);
+            TransactionUtil.endTransaction();
         }
     }
 
