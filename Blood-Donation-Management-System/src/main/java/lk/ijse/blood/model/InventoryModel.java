@@ -13,7 +13,6 @@ import java.util.List;
 public class InventoryModel {
 
     public static boolean addInventory(InventoryDto dto) throws SQLException, ClassNotFoundException {
-        Connection connection = DbConnection.getInstance().getConnection();
 
         return SQLUtil.execute( "INSERT INTO medical_inventory VALUES (?,?,?)",dto.getMedical_id(),dto.getBloodType(),dto.getDate());
     }

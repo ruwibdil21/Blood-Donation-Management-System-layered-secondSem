@@ -215,7 +215,7 @@ public class EmployeeFormController {
         return true;
     }
 
-    private void loadAllUsers(){
+    private void loadAllUsers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
             List<UserDto> userList = AdminModel.loadAllUsers();

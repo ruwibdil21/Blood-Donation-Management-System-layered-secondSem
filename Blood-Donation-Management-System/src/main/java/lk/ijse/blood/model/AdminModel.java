@@ -1,22 +1,20 @@
 package lk.ijse.blood.model;
 
 import lk.ijse.blood.Util.SQLUtil;
+import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.UserDto;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminModel {
-    public static List<UserDto> loadAllUsers() throws SQLException {
+    public static List<UserDto> loadAllUsers() throws SQLException, ClassNotFoundException {
 
-        ResultSet resultSet = null;
-        try {
-            resultSet = SQLUtil.execute("SELECT * FROM user");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM user");
+
         List<UserDto> userList = new ArrayList<>();
 
         while (resultSet.next()) {

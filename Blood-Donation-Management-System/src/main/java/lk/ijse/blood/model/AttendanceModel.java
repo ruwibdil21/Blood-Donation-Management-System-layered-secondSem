@@ -31,13 +31,7 @@ public class AttendanceModel {
 
 
     public boolean deleteAttendance(String attId) throws SQLException, ClassNotFoundException {
-//        Connection connection = DbConnection.getInstance().getConnection();
-//
-//        String sql = "DELETE FROM attendance WHERE Att_id = ?";
-//        PreparedStatement statement = connection.prepareStatement(sql);
-//
-//        statement.setString(1, attId);
-//        return statement.executeUpdate() > 0;
+
         return SQLUtil.execute("DELETE FROM attendance WHERE Att_id = ?",attId);
     }
 
@@ -45,11 +39,6 @@ public class AttendanceModel {
 
 
     public AttendanceDto searchAttendance(String attId) throws SQLException, ClassNotFoundException {
-       /* Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT * FROM attendance WHERE Att_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, attId);*/
 
         ResultSet resultSet = SQLUtil.execute( "SELECT * FROM attendance WHERE Att_id = ?");
 
