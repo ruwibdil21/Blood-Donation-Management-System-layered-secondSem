@@ -11,14 +11,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.EmployeeBO;
+import lk.ijse.blood.BO.Custom.Impl.EmployeeBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.EmployeeDto;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.dto.tm.EmployeeTm;
 import lk.ijse.blood.model.AdminModel;
-import lk.ijse.blood.model.DonorModel;
-import lk.ijse.blood.model.EmployeeModel;
+
 
 import javax.lang.model.element.Name;
 import java.io.IOException;
@@ -73,6 +74,8 @@ public class EmployeeFormController {
     @FXML
     private TextField txtRole;
 
+    EmployeeBO employeeBO = new EmployeeBOImpl();
+
     public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         loadAllEmployees();
@@ -90,12 +93,11 @@ public class EmployeeFormController {
     }
 
     public void loadAllEmployees() throws ClassNotFoundException {
-        var model = new EmployeeModel();
 
         ObservableList<EmployeeTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<EmployeeDto> dtoList = model.loadAllEmployees();
+            List<EmployeeDto> dtoList = employeeBO.loadAllEmployee();
 
             for (EmployeeDto dto : dtoList) {
                 obList.add(new EmployeeTm(
@@ -139,11 +141,9 @@ public class EmployeeFormController {
         if (!isEmployeeValidated){return;}
 
         var dto = new EmployeeDto(emp_id,user_id,name,address,role,dob);
-        var model = new EmployeeModel();
-
         try {
 
-            boolean isSaved = model.saveEmployee(dto);
+            boolean isSaved = employeeBO.saveEmployee(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Employee Added Succesfull").show();
                 clearFields();

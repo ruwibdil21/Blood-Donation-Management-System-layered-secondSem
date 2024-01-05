@@ -11,16 +11,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.AdminBO;
+import lk.ijse.blood.BO.Custom.Impl.AdminBOImpl;
+import lk.ijse.blood.BO.Custom.Impl.SupplierBOImpl;
+import lk.ijse.blood.BO.Custom.SupplierBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.EmployeeDto;
 import lk.ijse.blood.dto.SupplierDto;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.dto.tm.SupplierTm;
-import lk.ijse.blood.model.AdminModel;
-import lk.ijse.blood.model.DonorModel;
-import lk.ijse.blood.model.EmployeeModel;
-import lk.ijse.blood.model.SupplierModel;
+
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -66,6 +68,8 @@ public class SupplierFormController {
     @FXML
     private TextField txtTel;
 
+    SupplierBO supplierBO = new SupplierBOImpl();
+    AdminBO adminBO = new AdminBOImpl();
     public void initialize() throws SQLException, ClassNotFoundException {
         loadAllSuppliers();
         setCellValueFactory();
@@ -93,12 +97,11 @@ public class SupplierFormController {
     }
 
     public void loadAllSuppliers() throws ClassNotFoundException {
-        var model = new SupplierModel();
 
         ObservableList<SupplierTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<SupplierDto> dtoList = model.loadAllSuppliers();
+            List<SupplierDto> dtoList = supplierBO.loadAllSupplier();
 
             for (SupplierDto dto : dtoList) {
                 obList.add(new SupplierTm(
@@ -121,10 +124,9 @@ public class SupplierFormController {
     @FXML
     void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String supId = txtSupId.getText();
-        var model = new SupplierModel();
 
         try {
-            boolean isDeleted = model.deleteSupplier(supId);
+            boolean isDeleted = supplierBO.deleteSupplier(supId);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Supplier Deleted Succesfull").show();
                 clearFields();
@@ -180,10 +182,9 @@ public class SupplierFormController {
         if (!isSupplierValidated){return;}
 
         var dto = new SupplierDto(supId, userId, name, address, tel);
-        var model = new SupplierModel();
 
         try {
-            boolean isSaved = model.addSupplier(dto);
+            boolean isSaved = supplierBO.saveSupplier(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Supplier Added Succesfull").show();
                 clearFields();
@@ -230,10 +231,9 @@ public class SupplierFormController {
             if (!isSupplierValidated){return;}
 
             var dto = new SupplierDto(supId,userId,name,address,tel);
-            var model = new SupplierModel();
 
             try {
-                boolean isUpdated = model.updateSupplier(dto);
+                boolean isUpdated = supplierBO.updateSupplier(dto);
                 if (isUpdated) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Supplier Update Succesfull!!!").show();
                     clearFields();
@@ -268,7 +268,7 @@ public class SupplierFormController {
     private void loadAllUsers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<UserDto> userList = AdminModel.loadAllUsers();
+            List<UserDto> userList = adminBO.loadAllAdmin();
             for (UserDto userDto : userList) {
                 obList.add(userDto.getUser_id());
             }

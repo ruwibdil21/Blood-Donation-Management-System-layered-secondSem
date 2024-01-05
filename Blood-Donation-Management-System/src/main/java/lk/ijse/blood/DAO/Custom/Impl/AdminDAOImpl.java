@@ -1,7 +1,8 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.AdminDAO;
 import lk.ijse.blood.Util.SQLUtil;
+import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.entity.User;
 
 import java.sql.ResultSet;
@@ -51,8 +52,22 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.execute("SELECT user_id FROM user ORDER BY user_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("User_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newAdminId = Integer.parseInt(numericPart) + 1;
+            return String.format("U%03d", newAdminId);
+        } else {
+            return "U001";
+        }
+    }
+
+    @Override
     public boolean login(String id, String password) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM user WHERE User_id =? AND Password = ?",id,password);
         return resultSet.next();
     }
+
 }

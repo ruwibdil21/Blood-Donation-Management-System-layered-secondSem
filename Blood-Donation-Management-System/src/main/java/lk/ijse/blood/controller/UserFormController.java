@@ -4,13 +4,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.blood.db.DbConnection;
+import lk.ijse.blood.BO.Custom.AdminBO;
+import lk.ijse.blood.BO.Custom.Impl.AdminBOImpl;
 import lk.ijse.blood.dto.UserDto;
-import lk.ijse.blood.model.AdminModel;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -28,9 +27,16 @@ public class UserFormController {
     private TextField txtUserName;
     @FXML
     private AnchorPane user;
+    AdminBO adminBO = new AdminBOImpl();
 
-    public void initialize() throws SQLException {
-        autoGenarateId();
+    public void initialize(){
+        try {
+            autoGenarateId();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -44,12 +50,11 @@ public class UserFormController {
         }
 
         var dto = new UserDto(id,name,password);
-        var model = new AdminModel();
 
         try {
             boolean isSaved = false;
             try {
-                isSaved = model.saveUser(dto);
+                isSaved = adminBO.saveAdmin(dto);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -77,28 +82,8 @@ public class UserFormController {
         stage.centerOnScreen();
     }
 
-    private void autoGenarateId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT user_id FROM user ORDER BY user_id DESC LIMIT 1";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
-        boolean isIdExits = resultSet.next();
-        if (isIdExits) {
-            String oldId = resultSet.getString(1);
-            String substring = oldId.substring(1, 4);
-            int id = Integer.parseInt(substring);
-            id++;
-            if (id < 10) {
-                txtUserId.setText("U00" + id);
-            } else if (id < 100) {
-                txtUserId.setText("U0" + id);
-            } else {
-                txtUserId.setText("U" + id);
-            }
-        } else {
-            txtUserId.setText("U001");
-        }
+    private void autoGenarateId() throws SQLException, ClassNotFoundException {
+        adminBO.generateAdminId();
     }
 }
 

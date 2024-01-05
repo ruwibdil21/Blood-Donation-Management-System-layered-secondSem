@@ -6,12 +6,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.blood.BO.Custom.DonationBO;
+import lk.ijse.blood.BO.Custom.Impl.DonationBOImpl;
+import lk.ijse.blood.BO.Custom.Impl.NeederBOImpl;
+import lk.ijse.blood.BO.Custom.Impl.NeederRequestBOImpl;
+import lk.ijse.blood.BO.Custom.NeederBO;
+import lk.ijse.blood.BO.Custom.NeederRequestBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
-import lk.ijse.blood.dto.tm.NeederRequestTm;
-import lk.ijse.blood.model.DonationModel;
-import lk.ijse.blood.model.NeederModel;
-import lk.ijse.blood.model.NeederRequestModel;
+
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -36,6 +39,10 @@ public class NeederRequestController {
 
     @FXML
     private TextField txtNeeReq;
+
+    NeederRequestBO neederRequestBO= new NeederRequestBOImpl();
+    NeederBO neederBO = new NeederBOImpl();
+    DonationBO donationBO = new DonationBOImpl();
 
     public void initialize() throws SQLException, ClassNotFoundException {
         autoGenerateRequestId();
@@ -63,7 +70,7 @@ public class NeederRequestController {
         var requestdto = new RequestDetailsDto(neeReq, blood_bag_id,type);
 
         try {
-            boolean isSaved = NeederRequestModel.placeNeederRequest(neederrequestdto,bagdto,requestdto);
+            boolean isSaved = neederRequestBO.placeNeederRequest(neederrequestdto,bagdto,requestdto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Needer Request Added Succesfull").show();
                 clearFields();
@@ -87,7 +94,7 @@ public class NeederRequestController {
     private void loadAllNeeder() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<NeederDto> needList = NeederModel.loadAllNeeders();
+            List<NeederDto> needList = neederBO.loadAllNeeder();
 
             for (NeederDto neederDto  : needList) {
                 obList.add(neederDto.getNeederId());
@@ -101,7 +108,7 @@ public class NeederRequestController {
     private void loadAllDonation() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<DonationDto> donList = DonationModel.loadAllDonations();
+            List<DonationDto> donList = donationBO.loadAllDonation();
 
             for (DonationDto donationDto : donList) {
                 obList.add(donationDto.getDo_id());

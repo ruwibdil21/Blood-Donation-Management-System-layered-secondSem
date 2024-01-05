@@ -13,5 +13,6 @@ public interface CrudDAO <T> extends SuperDAO{
      boolean save(T dto) throws SQLException, ClassNotFoundException ;
      boolean update(T dto) throws SQLException, ClassNotFoundException;
      boolean add(T dto) throws SQLException, ClassNotFoundException ;
+     String generateId() throws SQLException,ClassNotFoundException;
 }
 

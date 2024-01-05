@@ -6,16 +6,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.blood.BO.Custom.BloodInventoryBO;
+import lk.ijse.blood.BO.Custom.Impl.BloodInventoryBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.BloodInventoryDto;
-import lk.ijse.blood.dto.DonationDto;
-import lk.ijse.blood.dto.SalaryDto;
 import lk.ijse.blood.dto.tm.BloodInventoryTm;
-import lk.ijse.blood.dto.tm.DonationTm;
-import lk.ijse.blood.model.BloodInventoryModel;
-import lk.ijse.blood.model.DonationModel;
-import lk.ijse.blood.model.SalaryModel;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,6 +33,7 @@ public class BloodInventoryFormController {
     @FXML
     private TableColumn<?, ?> colDonationDate;
 
+    BloodInventoryBO bloodInventoryBO = new BloodInventoryBOImpl();
 
     public void initialize() throws ClassNotFoundException {
         loadAllBloodInvenorys();
@@ -57,12 +53,10 @@ public class BloodInventoryFormController {
     }
 
     public void loadAllBloodInvenorys() throws ClassNotFoundException {
-        var model = new BloodInventoryModel();
-
         ObservableList<BloodInventoryTm> obList = FXCollections.observableArrayList();
 
         try{
-            List<BloodInventoryDto> dtoList = model.loadAllBloodInventorys();
+            List<BloodInventoryDto> dtoList = bloodInventoryBO.loadAllBloodInventoy();
 
             for(BloodInventoryDto dto : dtoList){
                 obList.add(new BloodInventoryTm(
@@ -84,12 +78,11 @@ public class BloodInventoryFormController {
     @FXML
    public void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String bloodBag_id = txtBloodBag_id.getText();
-        var model = new BloodInventoryModel();
 
         try{
-            BloodInventoryDto dto = model.searchBloodInventory(bloodBag_id);
+            BloodInventoryDto dto = bloodInventoryBO.searchBloodInventory(bloodBag_id);
             if(dto != null) {
-                boolean isDeleted = model.isDeleteBloodInventory(bloodBag_id);
+                boolean isDeleted = bloodInventoryBO.deleteBloodInventory(bloodBag_id);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Blood Inventory Delete Succesfull!!!").show();
                     clearFields();
@@ -116,10 +109,9 @@ public class BloodInventoryFormController {
         if (!isBloodInventoryValidated){return;}
 
         var dto = new BloodInventoryDto(bloodBagId,donationId,donationDate,exDate,bloodType);
-        var model = new BloodInventoryModel();
 
         try {
-            boolean isSaved = model.saveBloodInventory(dto);
+            boolean isSaved = bloodInventoryBO.saveBloodInventory(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "BloodInventory Added Succesfull").show();
                 clearFields();
@@ -143,10 +135,9 @@ public class BloodInventoryFormController {
         if (!isBloodInventoryValidated){return;}
 
         var dto = new BloodInventoryDto(bloodBagId,donationId,donationDate,exDate,bloodType);
-        var model = new BloodInventoryModel();
 
         try {
-            boolean isUpdated = model.updateBloodInventory(dto);
+            boolean isUpdated = bloodInventoryBO.updateBloodInventoy(dto);
             if(isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Blood Inventory Update Succesfull!!!").show();
                 clearFields();

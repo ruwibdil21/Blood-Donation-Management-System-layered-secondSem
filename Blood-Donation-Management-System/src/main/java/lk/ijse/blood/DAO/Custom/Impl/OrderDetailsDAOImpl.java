@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.OrderDetailsDAO;
 import lk.ijse.blood.Util.SQLUtil;
@@ -67,5 +67,10 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
     @Override
     public boolean add(OrderDetails dto) throws SQLException, ClassNotFoundException {
         return false;
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 }

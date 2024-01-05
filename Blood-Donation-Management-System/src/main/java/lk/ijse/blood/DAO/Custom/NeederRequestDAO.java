@@ -25,4 +25,6 @@ public interface NeederRequestDAO extends CrudDAO<NeederRequest> {
 //      boolean deleteNeederRequest(String neeReq) throws SQLException, ClassNotFoundException ;
 //
 //      List<NeederRequestDto> loadAllNeederRequests() throws SQLException, ClassNotFoundException ;
+
+  boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto,RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException;
   }

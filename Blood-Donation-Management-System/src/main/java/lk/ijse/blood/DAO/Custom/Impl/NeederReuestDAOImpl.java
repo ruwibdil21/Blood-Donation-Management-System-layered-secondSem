@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.NeederRequestDAO;
 import lk.ijse.blood.Util.SQLUtil;
@@ -88,5 +88,10 @@ public class NeederReuestDAOImpl implements NeederRequestDAO {
     @Override
     public boolean add(NeederRequest dto) throws SQLException, ClassNotFoundException {
         return false;
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 }

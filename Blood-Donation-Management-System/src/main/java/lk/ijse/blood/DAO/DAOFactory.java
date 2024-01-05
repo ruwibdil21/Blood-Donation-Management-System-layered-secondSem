@@ -1,8 +1,7 @@
 package lk.ijse.blood.DAO;
 
-import lk.ijse.blood.DAO.Impl.*;
+import lk.ijse.blood.DAO.Custom.Impl.*;
 
-import javax.management.Query;
 
 public class DAOFactory {
     private static DAOFactory daoFactory;
@@ -16,7 +15,7 @@ public class DAOFactory {
 
     public enum DAOTypes{
 
-        ADMIN,ATTENDANCE,BLOODINVENTORY,DONATION,DONOR,EMPLOYEE,INVENTORY,NEEDER,NEEDERREQUEST,ORDERDETAILS,REQUESTDETAILS,SALARY,SUPPLIER,SUPPLIERORDER//,QUERY
+        ADMIN,ATTENDANCE,BLOODINVENTORY,DONATION,DONOR,EMPLOYEE,INVENTORY,NEEDER,NEEDERREQUEST,ORDERDETAILS,REQUESTDETAILS,SALARY,SUPPLIER,SUPPLIERORDER
 
     }
 
@@ -50,12 +49,8 @@ public class DAOFactory {
                 return new SupplierDAOImpl();
             case SUPPLIERORDER:
                 return new SupplierDAOImpl();
-           // case QUERY:
-             //   return new Query();
-
-
+            default:
+                return null;
         }
-       return null;
     }
-
 }

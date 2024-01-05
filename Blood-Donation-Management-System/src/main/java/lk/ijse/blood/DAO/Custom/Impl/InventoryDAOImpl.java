@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.InventoryDAO;
 import lk.ijse.blood.Util.SQLUtil;
@@ -52,5 +52,10 @@ public class InventoryDAOImpl implements InventoryDAO {
     @Override
     public boolean add(Inventory dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute( "INSERT INTO medical_inventory VALUES (?,?,?)",dto.getMedical_id(),dto.getBloodType(),dto.getDate());
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 }

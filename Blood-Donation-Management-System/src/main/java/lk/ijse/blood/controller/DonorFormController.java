@@ -10,10 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.DonorBO;
+import lk.ijse.blood.BO.Custom.Impl.DonorBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.tm.DonorTm;
-import lk.ijse.blood.model.DonorModel;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -64,6 +65,8 @@ public class DonorFormController {
     @FXML
     private TextField txtType;
 
+    DonorBO donorBO = new DonorBOImpl();
+
     public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         loadAllDonors();
@@ -88,12 +91,11 @@ public class DonorFormController {
     }
 
     private void loadAllDonors() throws ClassNotFoundException {
-        var model = new DonorModel();
 
         ObservableList<DonorTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<DonorDto> dtoList = model.loadAllDonors();
+            List<DonorDto> dtoList = donorBO.loadAllDonor();
 
             for (DonorDto dto : dtoList) {
                 obList.add(new DonorTm(
@@ -111,10 +113,9 @@ public class DonorFormController {
 
     public void btnSearchOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String d_id = txtId.getText();
-        var model = new DonorModel();
 
         try {
-            DonorDto dto = model.searchDonor(d_id);
+            DonorDto dto = donorBO.searchDonor(d_id);
 
             if (dto != null) {
                 fillFields(dto);
@@ -137,13 +138,11 @@ public class DonorFormController {
 
     public void btnDeleteOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String d_id = txtId.getText();
-        var model = new DonorModel();
 
         try {
-            var donorModel = new DonorModel();
-            DonorDto dto = model.searchDonor(d_id);
+            DonorDto dto = donorBO.searchDonor(d_id);
             if (dto != null) {
-                boolean isDeleted = model.deleteDonor(d_id);
+                boolean isDeleted = donorBO.deleteDonor(d_id);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Donor Delete Succesfull!!!").show();
                     clearFields();
@@ -170,10 +169,9 @@ public class DonorFormController {
         if (!isDonorValidated){return;}
 
         var dto = new DonorDto(d_id, firstName, lastName, dob, type,tel, l_date);
-        var model = new DonorModel();
 
         try {
-            boolean isUpdated = model.updateDonor(dto);
+            boolean isUpdated = donorBO.updateDonor(dto);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Donor Update Succesfull!!!").show();
                 clearFields();
@@ -196,10 +194,9 @@ public class DonorFormController {
         if (!isDonorValidated){return;}
 
         var dto = new DonorDto(d_id, firstName, lastName, dob, type,tel, l_date);
-        var model = new DonorModel();
 
         try {
-            boolean isSaved = model.saveDonor(dto);
+            boolean isSaved = donorBO.saveDonor(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Donor Added Succesfull").show();
                 clearFields();

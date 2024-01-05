@@ -1,10 +1,8 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.SupplierOrderDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.SupplierOrdersDto;
 import lk.ijse.blood.entity.SupplierOrders;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,5 +59,10 @@ public class SupplierOrderDAOImpl implements SupplierOrderDAO {
     @Override
     public boolean add(SupplierOrders dto) throws SQLException, ClassNotFoundException {
         return false;
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 }

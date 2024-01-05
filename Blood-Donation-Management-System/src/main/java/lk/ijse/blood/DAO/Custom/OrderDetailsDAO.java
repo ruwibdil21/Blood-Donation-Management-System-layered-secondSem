@@ -14,7 +14,7 @@ import lk.ijse.blood.model.SupplierOrderModel;
 import java.sql.SQLException;
 
 public interface OrderDetailsDAO extends CrudDAO<OrderDetails> {
-//     boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException, ClassNotFoundException ;
+    boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException, ClassNotFoundException ;
 //
 //     boolean saveOrderDetails(OrderDetailsDto dto) throws SQLException, ClassNotFoundException;
 

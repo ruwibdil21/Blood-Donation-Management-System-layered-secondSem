@@ -9,10 +9,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.blood.BO.Custom.Impl.RequestDetailsBOImpl;
+import lk.ijse.blood.BO.Custom.RequestDetailsBO;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.RequestDetailsDto;
 import lk.ijse.blood.dto.tm.RequestDetailsTm;
-import lk.ijse.blood.model.RequestDetailsModel;
+
 
 import java.sql.SQLException;
 import java.util.List;
@@ -42,6 +44,8 @@ public class RequestDetailsFormController {
     @FXML
     private TextField txtNeederId;
 
+    RequestDetailsBO requestDetailsBO = new RequestDetailsBOImpl();
+
 
     public void initialize() throws ClassNotFoundException {
         loadAllRequestDetails();
@@ -55,12 +59,11 @@ public class RequestDetailsFormController {
     }
 
     public void loadAllRequestDetails() throws ClassNotFoundException {
-        var model = new RequestDetailsModel();
 
         ObservableList<RequestDetailsTm> obList = FXCollections.observableArrayList();
 
         try{
-            List<RequestDetailsDto> dtoList = model.loadAllRequestDetails();
+            List<RequestDetailsDto> dtoList = requestDetailsBO.loadAllRequestDetails();
 
             for(RequestDetailsDto dto : dtoList){
                 obList.add(new RequestDetailsTm(
@@ -79,14 +82,12 @@ public class RequestDetailsFormController {
     @FXML
     public void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
             String Needer_id = txtNeederId.getText();
-            var model = new RequestDetailsModel();
 
             try{
-                var requestDetailsModel = new RequestDetailsModel();
 
-                RequestDetailsDto dto =model.searchRequestDetails(Needer_id);
+                RequestDetailsDto dto =requestDetailsBO.searchRequestDetails(Needer_id);
                 if(dto != null) {
-                    boolean isDeleted = model.deleteRequestDetails(Needer_id);
+                    boolean isDeleted = requestDetailsBO.deleteRequestDetails(Needer_id);
                     if (isDeleted) {
                         return;
                     }
@@ -115,10 +116,9 @@ public class RequestDetailsFormController {
         }
 
         var dto = new RequestDetailsDto(needer_id,bloodbag_id,description);
-        var model = new RequestDetailsModel();
 
         try {
-            boolean isSaved = model.saveRequestDetails(dto);
+            boolean isSaved = requestDetailsBO.saveRequestDetails(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "RequestDetails Added Succesfull").show();
                 clearFields();

@@ -12,12 +12,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.Impl.SalaryBOImpl;
+import lk.ijse.blood.BO.Custom.SalaryBO;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.SalaryDto;
 import lk.ijse.blood.dto.tm.DonorTm;
 import lk.ijse.blood.dto.tm.SalaryTm;
-import lk.ijse.blood.model.DonorModel;
-import lk.ijse.blood.model.SalaryModel;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -63,6 +64,8 @@ public class SalaryFormController {
     @FXML
     private TextField txtYear;
 
+    SalaryBO salaryBO = new SalaryBOImpl();
+
     public void initialize() throws ClassNotFoundException {
         setCellValueFactory();
         loadAllSalarys();
@@ -79,12 +82,11 @@ public class SalaryFormController {
     }
 
     public void loadAllSalarys() throws ClassNotFoundException {
-        var model = new SalaryModel();
 
         ObservableList<SalaryTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<SalaryDto> dtoList = model.loadAllSalarys();
+            List<SalaryDto> dtoList = salaryBO.loadAllSalary();
 
             for (SalaryDto dto : dtoList) {
                 obList.add(new SalaryTm(
@@ -105,13 +107,12 @@ public class SalaryFormController {
     @FXML
     void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String salaryId = txtSalaryId.getText();
-        var model = new SalaryModel();
 
         try {
-            var salaryModel = new SalaryModel();
-            SalaryDto dto = model.searchSalary(salaryId);
+
+            SalaryDto dto = salaryBO.searchSalary(salaryId);
             if (dto != null) {
-                boolean isDeleted = model.deleteSalary(salaryId);
+                boolean isDeleted = salaryBO.deleteSalary(salaryId);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Salary Delete Succesfull!!!").show();
                     clearFields();
@@ -148,10 +149,9 @@ public class SalaryFormController {
 
 
         var dto = new SalaryDto(salaryId, emp_id, amount, month, year);
-        var model = new SalaryModel();
 
         try {
-            boolean isSaved = model.saveSalary(dto);
+            boolean isSaved = salaryBO.saveSalary(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Salary Added Succesfull").show();
                 clearFields();
@@ -174,10 +174,9 @@ public class SalaryFormController {
         if (!isSalaryValidated){return;}
 
         var dto = new SalaryDto(salaryId, empId, amount, month, year);
-        var model = new SalaryModel();
 
         try {
-            boolean isUpdated = model.updateSalary(dto);
+            boolean isUpdated = salaryBO.updateSalary(dto);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Salary Update Succesfull!!!").show();
                 clearFields();

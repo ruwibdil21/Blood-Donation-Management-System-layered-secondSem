@@ -9,9 +9,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.Impl.InventoryBOImpl;
+import lk.ijse.blood.BO.Custom.InventoryBO;
 import lk.ijse.blood.dto.InventoryDto;
 import lk.ijse.blood.dto.tm.InventoryTm;
-import lk.ijse.blood.model.InventoryModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -43,6 +44,8 @@ public class InventoryController {
     @FXML
     private TextField txtMedicalId;
 
+    InventoryBO inventoryBO = new InventoryBOImpl();
+
     public void initialize() throws SQLException, ClassNotFoundException {
         loadAllInventories();
         setCellValueFactory();
@@ -55,12 +58,11 @@ public class InventoryController {
     }
 
     public void loadAllInventories() throws SQLException, ClassNotFoundException {
-        var model = new InventoryModel();
 
         ObservableList<InventoryTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<InventoryDto> dtoList = model.loadAllInventories();
+            List<InventoryDto> dtoList =inventoryBO.loadAllInventory();
 
             for (InventoryDto dto : dtoList) {
                 obList.add(new InventoryTm(
@@ -97,10 +99,9 @@ public class InventoryController {
         }
 
         var dto = new InventoryDto(med_id, bloodType,date);
-        var model = new InventoryModel();
 
         try {
-            boolean isSaved = model.addInventory(dto);
+            boolean isSaved = inventoryBO.saveInventory(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Inventory Added Succesfull").show();
                 clearFields();
@@ -129,10 +130,8 @@ public class InventoryController {
         }
 
         var dto = new InventoryDto(medical_id, blood_type,date);
-        var model = new InventoryModel();
-
         try {
-            boolean isUpdated = model.updateInventory(dto);
+            boolean isUpdated = inventoryBO.updateInventory(dto);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Inventory Update Succesfull!!!").show();
                 clearFields();

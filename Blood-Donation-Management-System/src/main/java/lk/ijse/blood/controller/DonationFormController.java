@@ -10,13 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.DonationBO;
+import lk.ijse.blood.BO.Custom.Impl.DonationBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonationDto;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.tm.DonationTm;
-import lk.ijse.blood.dto.tm.DonorTm;
-import lk.ijse.blood.model.DonationModel;
-import lk.ijse.blood.model.DonorModel;
 
 import java.io.IOException;
 import java.sql.*;
@@ -59,6 +58,7 @@ public class DonationFormController {
     @FXML
     private ComboBox cmbDonorid;
 
+    DonationBO donationBO = new DonationBOImpl();
     @FXML
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/dashboard_form.fxml"));
@@ -72,7 +72,7 @@ public class DonationFormController {
     public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         loadAllDonations();
-        loadAllDonors();
+       // loadAllDonors();
         autoGenerateId();
         txtDate.setValue(LocalDate.now());
     }
@@ -86,12 +86,11 @@ public class DonationFormController {
     }
 
     public void loadAllDonations() throws ClassNotFoundException {
-        var model = new DonationModel();
 
         ObservableList<DonationTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<DonationDto> dtoList = model.loadAllDonations();
+            List<DonationDto> dtoList = donationBO.loadAllDonation();
 
             for (DonationDto dto : dtoList) {
                 obList.add(new DonationTm(
@@ -112,12 +111,11 @@ public class DonationFormController {
     @FXML
     public void btnDeleteOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String do_id = txtDoId.getText();
-        var model = new DonationModel();
 
         try {
-            DonationDto dto = model.searchDonation(do_id);
+            DonationDto dto = donationBO.searchDonation(do_id);
             if (dto != null) {
-                boolean isDeleted = model.isDeleteDonation(do_id);
+                boolean isDeleted = donationBO.deleteDonation(do_id);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Donation Delete Succesfull!!!").show();
                     clearFields();
@@ -150,10 +148,9 @@ public class DonationFormController {
         if (!isDonationValidated){return;}
 
         var dto = new DonationDto(do_id, d_id, date, blood_type, hemoglobin_level);
-        var model = new DonationModel();
 
         try {
-            boolean isSaved = model.saveDonation(dto);
+            boolean isSaved = donationBO.saveDonation(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Donation Added Succesfull").show();
                 clearFields();
@@ -168,10 +165,9 @@ public class DonationFormController {
     public void btnSearchOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
 
         String do_id = txtDoId.getText();
-        var model = new DonationModel();
 
         try {
-            DonationDto dto = model.searchDonation(do_id);
+            DonationDto dto = donationBO.searchDonation(do_id);
 
             if (dto != null) {
                 fillFields(dto);
@@ -209,10 +205,10 @@ public class DonationFormController {
         return true;
     }
 
-    private void loadAllDonors() throws SQLException, ClassNotFoundException {
+   /* private void loadAllDonors() throws SQLException, ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<DonorDto> donList = DonorModel.loadAllDonors();
+            List<DonorDto> donList = donationBO.loadAllDonors();
 
             for (DonorDto donorDto : donList) {
                 obList.add(donorDto.getD_id());
@@ -222,7 +218,7 @@ public class DonationFormController {
             throw new RuntimeException(e);
         }
     }
-
+*/
     private void autoGenerateId() throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();
         Statement stm = connection.createStatement();

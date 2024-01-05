@@ -7,15 +7,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.blood.BO.Custom.Impl.OrderDetailsBOImpl;
+import lk.ijse.blood.BO.Custom.Impl.SupplierBOImpl;
+import lk.ijse.blood.BO.Custom.OrderDetailsBO;
+import lk.ijse.blood.BO.Custom.SupplierBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
 import lk.ijse.blood.dto.tm.OrderDetailsTm;
-import lk.ijse.blood.model.AdminModel;
-import lk.ijse.blood.model.OrderDetailsModel;
-import lk.ijse.blood.model.SupplierModel;
+
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -72,6 +73,9 @@ public class OrderDetailsController {
 
     @FXML
     private TextField txtOrderid;
+
+    OrderDetailsBO orderDetailsBO = new OrderDetailsBOImpl();
+    SupplierBO supplierrBO = new SupplierBOImpl();
     public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         //loadAllOrderDetails();
@@ -137,7 +141,7 @@ public class OrderDetailsController {
         var orderDetailsdto = new OrderDetailsDto(supOder_id, med_id, description);
 
         try {
-            boolean isSaved = OrderDetailsModel.placeOrderDetails(supplierOrdersdto, inventorydto, orderDetailsdto);
+            boolean isSaved = orderDetailsBO.placeOrderDetails(supplierOrdersdto, inventorydto, orderDetailsdto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Order Details Added Succesfull").show();
                 clearFields();
@@ -170,7 +174,7 @@ public class OrderDetailsController {
     private void loadAllSuppliers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<SupplierDto> supList = SupplierModel.loadAllSuppliers();
+            List<SupplierDto> supList = supplierrBO.loadAllSupplier();
             for (SupplierDto supplierDto : supList) {
                 obList.add(supplierDto.getSup_id());
             }
@@ -179,6 +183,7 @@ public class OrderDetailsController {
             e.printStackTrace();
         }
     }
+
 
     private void autoGenarateOrderId() throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();

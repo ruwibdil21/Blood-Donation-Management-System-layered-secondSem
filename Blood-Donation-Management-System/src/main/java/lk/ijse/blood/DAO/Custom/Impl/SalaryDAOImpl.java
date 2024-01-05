@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.SalaryDAO;
 import lk.ijse.blood.Util.SQLUtil;
@@ -63,5 +63,10 @@ public class SalaryDAOImpl implements SalaryDAO {
     @Override
     public boolean add(Salary dto) throws SQLException, ClassNotFoundException {
         return false;
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 }

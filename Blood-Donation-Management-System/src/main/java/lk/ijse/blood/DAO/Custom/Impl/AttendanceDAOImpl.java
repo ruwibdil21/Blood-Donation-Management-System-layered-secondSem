@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.AttendanceDAO;
 import lk.ijse.blood.Util.SQLUtil;
@@ -59,5 +59,18 @@ public class AttendanceDAOImpl implements AttendanceDAO {
     @Override
     public boolean add(Attendance dto) throws SQLException, ClassNotFoundException {
         return false;
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.execute("SELECT Att_id FROM attendance ORDER BY Att_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("Att_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newAttendanceID = Integer.parseInt(numericPart) + 1;
+            return String.format("Att%03d", newAttendanceID);
+        } else {
+            return "Att001";
+        }
     }
 }

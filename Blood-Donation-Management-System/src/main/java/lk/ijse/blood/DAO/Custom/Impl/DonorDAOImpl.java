@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.DonorDAO;
 import lk.ijse.blood.Util.SQLUtil;
@@ -66,6 +66,11 @@ public class DonorDAOImpl implements DonorDAO {
     @Override
     public boolean add(Donor dto) throws SQLException, ClassNotFoundException {
         return false;
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 
 

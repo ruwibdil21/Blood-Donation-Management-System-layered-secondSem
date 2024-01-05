@@ -9,9 +9,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.blood.BO.Custom.Impl.SupplierOrderBOImpl;
+import lk.ijse.blood.BO.Custom.SupplierOrderBO;
 import lk.ijse.blood.dto.SupplierOrdersDto;
 import lk.ijse.blood.dto.tm.SupplierOrdersTm;
-import lk.ijse.blood.model.SupplierOrderModel;
+
 
 import java.sql.SQLException;
 import java.util.List;
@@ -46,6 +48,8 @@ public class SupplierOrderFormController {
     @FXML
     private TextField txtSupplierId;
 
+    SupplierOrderBO supplierOrderBO = new SupplierOrderBOImpl();
+
     public void initialize() throws ClassNotFoundException {
         loadAllSupplierOrders();
         setCellValueFactory();
@@ -59,12 +63,11 @@ public class SupplierOrderFormController {
     }
 
     public void loadAllSupplierOrders() throws ClassNotFoundException {
-        var model = new SupplierOrderModel();
 
         ObservableList<SupplierOrdersTm> obList = FXCollections.observableArrayList();
 
         try{
-            List<SupplierOrdersDto> dtoList = model.loadAllSupplierOrders();
+            List<SupplierOrdersDto> dtoList = supplierOrderBO.loadAllSupplierOrders();
 
             for(SupplierOrdersDto dto : dtoList){
                 obList.add(new SupplierOrdersTm(
@@ -85,13 +88,11 @@ public class SupplierOrderFormController {
     @FXML
     public void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String supplier_id = txtSupplierId.getText();
-        var model = new SupplierOrderModel();
 
         try{
-            var supplierOrderModel = new SupplierOrderModel();
-            SupplierOrdersDto dto = model.searchSupplierOrders(supplier_id);
+            SupplierOrdersDto dto = supplierOrderBO.searchSupplierOrders(supplier_id);
             if(dto != null) {
-                boolean isDeleted = model.deleteSupplierOrder(supplier_id);
+                boolean isDeleted = supplierOrderBO.deleteSupplierOrders(supplier_id);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "SupplierOrders Delete Succesfull!!!").show();
                     clearFields();
@@ -120,10 +121,9 @@ public class SupplierOrderFormController {
         }
 
         var dto = new SupplierOrdersDto(order_id,supplier_id,date,amount);
-        var model = new SupplierOrderModel();
 
         try {
-            boolean isSaved = model.saveSupplierOrders(dto);
+            boolean isSaved = supplierOrderBO.saveSupplierOrders(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "SupplierOrder Added Succesfull").show();
                 clearFields();

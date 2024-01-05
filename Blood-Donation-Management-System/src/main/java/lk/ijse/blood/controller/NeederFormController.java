@@ -11,12 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.AdminBO;
+import lk.ijse.blood.BO.Custom.Impl.AdminBOImpl;
+import lk.ijse.blood.BO.Custom.Impl.NeederBOImpl;
+import lk.ijse.blood.BO.Custom.NeederBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.NeederDto;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.dto.tm.NeederTm;
-import lk.ijse.blood.model.AdminModel;
-import lk.ijse.blood.model.NeederModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -30,6 +32,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static lk.ijse.blood.model.AdminModel.loadAllUsers;
 
 public class NeederFormController {
 
@@ -74,6 +78,9 @@ public class NeederFormController {
     @FXML
     private TextField txtNeederId;
 
+    NeederBO neederBO = new NeederBOImpl();
+    AdminBO adminBO = new AdminBOImpl();
+
 
     public void initialize() throws SQLException, ClassNotFoundException {
         loadAllNeeders();
@@ -102,11 +109,9 @@ public class NeederFormController {
     }
 
     public void loadAllNeeders() throws SQLException, ClassNotFoundException {
-        var model = new NeederModel();
-
         ObservableList<NeederTm> obList = FXCollections.observableArrayList();
 
-        List<NeederDto> dtoList = model.loadAllNeeders();
+        List<NeederDto> dtoList = neederBO.loadAllNeeder();
 
         for (NeederDto dto : dtoList) {
             obList.add(new NeederTm(
@@ -124,10 +129,9 @@ public class NeederFormController {
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String neederId = txtNeederId.getText();
-        var model = new NeederModel();
 
         try {
-            boolean isDeleted = model.deleteNeeder(neederId);
+            boolean isDeleted = neederBO.deleteNeeder(neederId);
             if (isDeleted) {
                 System.out.println("Needer Deleted");
             }
@@ -182,10 +186,9 @@ public class NeederFormController {
 
 
         var dto = new NeederDto(neederId,userId,name, address, contact, email);
-        var model = new NeederModel();
 
         try {
-            boolean isSaved = model.saveNeeder(dto);
+            boolean isSaved = neederBO.saveNeeder(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Needer Saved Succesfull").show();
                 initialize();
@@ -208,10 +211,9 @@ public class NeederFormController {
         if (!isNeederValidated){return;}
 
         var dto = new NeederDto(neederId,userId,name, address, contact, email);
-        var model = new NeederModel();
 
         try {
-            boolean isUpdated = model.updateNeeder(dto);
+            boolean isUpdated = neederBO.updateNeeder(dto);
             if (isUpdated) {
                 System.out.println("Needer Updated");
             }
@@ -247,19 +249,20 @@ public class NeederFormController {
         return true;
     }
 
-    private void loadAllUsers() throws ClassNotFoundException {
-        ObservableList<String> obList = FXCollections.observableArrayList();
-        try {
-            List<UserDto> userList = AdminModel.loadAllUsers();
+   private void loadAllUsers() throws ClassNotFoundException {
+       ObservableList<String> obList = FXCollections.observableArrayList();
+       try {
+           List<UserDto> userList = adminBO.loadAllAdmin();
 
-            for (UserDto userDto  : userList) {
-                obList.add(userDto.getUser_id());
-            }
-            cmbUserId.setItems(obList);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+           for (UserDto userDto : userList) {
+               obList.add(userDto.getUser_id());
+           }
+           cmbUserId.setItems(obList);
+       } catch (SQLException e) {
+           throw new RuntimeException(e);
+       }
+   }
+
 
     private void autoGenarateId() throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();

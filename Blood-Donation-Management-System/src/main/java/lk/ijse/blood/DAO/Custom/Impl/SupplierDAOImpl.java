@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO.Impl;
+package lk.ijse.blood.DAO.Custom.Impl;
 
 import lk.ijse.blood.DAO.Custom.SupplierDAO;
 import lk.ijse.blood.Util.SQLUtil;
@@ -51,5 +51,10 @@ public class SupplierDAOImpl implements SupplierDAO {
     @Override
     public boolean add(Supplier dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute( "insert into supplier values (?,?,?,?,?)",dto.getSup_id(),dto.getUser_id(),dto.getName(),dto.getAddress(),dto.getTel());
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 }
