@@ -5,6 +5,9 @@ import lk.ijse.blood.dto.InventoryDto;
 import lk.ijse.blood.dto.OrderDetailsDto;
 import lk.ijse.blood.dto.RequestDetailsDto;
 import lk.ijse.blood.dto.SupplierOrdersDto;
+import lk.ijse.blood.entity.Inventory;
+import lk.ijse.blood.entity.OrderDetails;
+import lk.ijse.blood.entity.SupplierOrders;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,5 +19,5 @@ public interface OrderDetailsBO extends SuperBO {
     boolean saveOrderDetails(OrderDetailsDto dto) throws SQLException, ClassNotFoundException ;
     boolean updateOrderDetails(OrderDetailsDto dto) throws SQLException, ClassNotFoundException;
     String generateOrderDetails() throws SQLException,ClassNotFoundException;
-    boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException, ClassNotFoundException;
+    boolean placeOrderDetails(SupplierOrders supplierOrdersDto, Inventory inventoryDto, OrderDetails orderDetailsDto) throws SQLException, ClassNotFoundException;
 }

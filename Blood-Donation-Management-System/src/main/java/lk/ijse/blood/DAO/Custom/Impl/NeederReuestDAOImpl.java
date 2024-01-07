@@ -1,30 +1,39 @@
 package lk.ijse.blood.DAO.Custom.Impl;
 
+import lk.ijse.blood.BO.Custom.BloodInventoryBO;
+import lk.ijse.blood.DAO.Custom.BloodInventoryDAO;
 import lk.ijse.blood.DAO.Custom.NeederRequestDAO;
+import lk.ijse.blood.DAO.Custom.RequestDetailsDAO;
+import lk.ijse.blood.DAO.DAOFactory;
 import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.Util.TransactionUtil;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.dto.NeederRequestDto;
 import lk.ijse.blood.dto.RequestDetailsDto;
+import lk.ijse.blood.entity.BloodInventory;
 import lk.ijse.blood.entity.NeederRequest;
-import lk.ijse.blood.model.BloodInventoryModel;
-import lk.ijse.blood.model.NeederRequestModel;
-import lk.ijse.blood.model.RequestDetailsModel;
+import lk.ijse.blood.entity.RequestDetails;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class NeederReuestDAOImpl implements NeederRequestDAO {
-    public  boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto, RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException {
+
+    NeederRequestDAO neederRequestDAO = (NeederRequestDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.NEEDERREQUEST);
+
+    BloodInventoryDAO bloodInventoryDAO = (BloodInventoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BLOODINVENTORY);
+    RequestDetailsDAO requestDetailsDAO = (RequestDetailsDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.REQUESTDETAILS);
+    public  boolean placeNeederRequest(NeederRequest neederRequestDto, BloodInventory bagdto, RequestDetails requestDetailsDto) throws SQLException, ClassNotFoundException {
         try {
             TransactionUtil.startTransaction();
-            boolean isNeederRequestSaved = NeederRequestModel.saveNeederRequest(neederRequestDto);
+            boolean isNeederRequestSaved = neederRequestDAO.save(neederRequestDto);
             if (isNeederRequestSaved) {
-                boolean isBloodInventorySaved = BloodInventoryModel.saveBloodInventory(bagdto);
+                boolean isBloodInventorySaved = bloodInventoryDAO.save(bagdto);
                 if (isBloodInventorySaved) {
-                    boolean isrequestDetailsSaved = RequestDetailsModel.saveRequestDetails(requestDetailsDto);
+                    boolean isrequestDetailsSaved = requestDetailsDAO.save(requestDetailsDto);
                     if (isrequestDetailsSaved) {
                         return true;
                     }

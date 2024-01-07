@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface AdminBO extends SuperBO {
-
     List<UserDto> loadAllAdmin() throws SQLException, ClassNotFoundException;
     boolean deleteAdmin(String id) throws SQLException, ClassNotFoundException;
     UserDto searchAdmin(String id) throws SQLException, ClassNotFoundException ;

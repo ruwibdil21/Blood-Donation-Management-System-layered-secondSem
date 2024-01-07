@@ -6,7 +6,9 @@ import lk.ijse.blood.DAO.DAOFactory;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.dto.NeederRequestDto;
 import lk.ijse.blood.dto.RequestDetailsDto;
+import lk.ijse.blood.entity.BloodInventory;
 import lk.ijse.blood.entity.NeederRequest;
+import lk.ijse.blood.entity.RequestDetails;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public class NeederRequestBOImpl implements NeederRequestBO {
     }
 
     @Override
-    public boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto, RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException {
+    public boolean placeNeederRequest(NeederRequest neederRequestDto, BloodInventory bagdto, RequestDetails requestDetailsDto) throws SQLException, ClassNotFoundException {
         return neederRequestDAO.placeNeederRequest(neederRequestDto,bagdto,requestDetailsDto);
     }
 }

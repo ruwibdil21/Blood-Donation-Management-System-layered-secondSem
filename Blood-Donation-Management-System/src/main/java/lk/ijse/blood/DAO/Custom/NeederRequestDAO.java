@@ -1,20 +1,14 @@
 package lk.ijse.blood.DAO.Custom;
 
 import lk.ijse.blood.DAO.CrudDAO;
-import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.Util.TransactionUtil;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.dto.NeederRequestDto;
 import lk.ijse.blood.dto.RequestDetailsDto;
+import lk.ijse.blood.entity.BloodInventory;
 import lk.ijse.blood.entity.NeederRequest;
-import lk.ijse.blood.model.BloodInventoryModel;
-import lk.ijse.blood.model.NeederRequestModel;
-import lk.ijse.blood.model.RequestDetailsModel;
+import lk.ijse.blood.entity.RequestDetails;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public interface NeederRequestDAO extends CrudDAO<NeederRequest> {
 //      boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto, RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException ;
@@ -26,5 +20,5 @@ public interface NeederRequestDAO extends CrudDAO<NeederRequest> {
 //
 //      List<NeederRequestDto> loadAllNeederRequests() throws SQLException, ClassNotFoundException ;
 
-  boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto,RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException;
+  boolean placeNeederRequest(NeederRequest neederRequestDto, BloodInventory bagdto, RequestDetails requestDetailsDto) throws SQLException, ClassNotFoundException;
   }

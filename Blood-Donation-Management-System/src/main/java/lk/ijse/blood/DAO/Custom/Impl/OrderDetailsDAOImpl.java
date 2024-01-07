@@ -1,30 +1,35 @@
 package lk.ijse.blood.DAO.Custom.Impl;
 
+import lk.ijse.blood.DAO.Custom.InventoryDAO;
 import lk.ijse.blood.DAO.Custom.OrderDetailsDAO;
+import lk.ijse.blood.DAO.Custom.SupplierOrderDAO;
+import lk.ijse.blood.DAO.DAOFactory;
 import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.Util.TransactionUtil;
 import lk.ijse.blood.dto.InventoryDto;
 import lk.ijse.blood.dto.OrderDetailsDto;
 import lk.ijse.blood.dto.SupplierOrdersDto;
+import lk.ijse.blood.entity.Inventory;
 import lk.ijse.blood.entity.OrderDetails;
-import lk.ijse.blood.model.InventoryModel;
-import lk.ijse.blood.model.OrderDetailsModel;
-import lk.ijse.blood.model.SupplierOrderModel;
+import lk.ijse.blood.entity.SupplierOrders;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class OrderDetailsDAOImpl implements OrderDetailsDAO {
+    SupplierOrderDAO supplierOrderDAO = (SupplierOrderDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SUPPLIERORDER);
+    InventoryDAO inventoryDAO = (InventoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.INVENTORY);
+    OrderDetailsDAO orderDetailsDAO = (OrderDetailsDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDERDETAILS);
 
-    public  boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException, ClassNotFoundException {
+    public  boolean placeOrderDetails(SupplierOrders supplierOrdersDto, Inventory inventoryDto, OrderDetails orderDetailsDto) throws SQLException, ClassNotFoundException {
 
         try {
             TransactionUtil.startTransaction();
-            boolean isSupplierOrdersSaved = SupplierOrderModel.saveSupplierOrders(supplierOrdersDto);
+            boolean isSupplierOrdersSaved = supplierOrderDAO.save(supplierOrdersDto);
             if (isSupplierOrdersSaved) {
-                boolean isInventorySaved = InventoryModel.saveInventory(inventoryDto);
+                boolean isInventorySaved = inventoryDAO.save(inventoryDto);
                 if (isInventorySaved) {
-                    boolean isOrderDetailsSaved = OrderDetailsModel.saveOrderDetails(orderDetailsDto);
+                    boolean isOrderDetailsSaved = orderDetailsDAO.save(orderDetailsDto);
                     if (isOrderDetailsSaved) {
                         return true;
                     }

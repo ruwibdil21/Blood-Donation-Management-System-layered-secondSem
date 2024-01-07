@@ -8,7 +8,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.blood.model.AdminModel;
+import lk.ijse.blood.BO.Custom.AdminBO;
+import lk.ijse.blood.BO.Custom.Impl.AdminBOImpl;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -18,11 +20,13 @@ public class LoginFormController {
     public TextField txtId;
     public AnchorPane root;
 
+
+  AdminBO adminBO = new AdminBOImpl();
     @FXML
     void btnLoginOnAction(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
-        AdminModel adminModel = new AdminModel();
+        //AdminModel adminModel = new AdminModel();
 
-        boolean isValidAdmin = adminModel.loginAdmin(txtId.getText(),txtPassword.getText());
+        boolean isValidAdmin = adminBO.loginAdmin(txtId.getText(),txtPassword.getText());
 
         if (isValidAdmin){
             AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/dashboard_form.fxml"));

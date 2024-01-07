@@ -33,7 +33,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static lk.ijse.blood.model.AdminModel.loadAllUsers;
 
 public class NeederFormController {
 

@@ -4,6 +4,9 @@ import lk.ijse.blood.BO.SuperBO;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.dto.NeederRequestDto;
 import lk.ijse.blood.dto.RequestDetailsDto;
+import lk.ijse.blood.entity.BloodInventory;
+import lk.ijse.blood.entity.NeederRequest;
+import lk.ijse.blood.entity.RequestDetails;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,6 +18,6 @@ public interface NeederRequestBO extends SuperBO {
     boolean saveNeederRequest(NeederRequestDto dto) throws SQLException, ClassNotFoundException ;
     boolean updateNeederRequwst(NeederRequestDto dto) throws SQLException, ClassNotFoundException;
     String generateNeedrRequwst() throws SQLException,ClassNotFoundException;
-    boolean placeNeederRequest(NeederRequestDto neederRequestDto, BloodInventoryDto bagdto, RequestDetailsDto requestDetailsDto) throws SQLException, ClassNotFoundException;
+    boolean placeNeederRequest(NeederRequest neederRequestDto, BloodInventory bagdto, RequestDetails requestDetailsDto) throws SQLException, ClassNotFoundException;
 }
 

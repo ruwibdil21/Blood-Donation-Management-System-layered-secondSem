@@ -14,6 +14,9 @@ import lk.ijse.blood.BO.Custom.NeederBO;
 import lk.ijse.blood.BO.Custom.NeederRequestBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
+import lk.ijse.blood.entity.BloodInventory;
+import lk.ijse.blood.entity.NeederRequest;
+import lk.ijse.blood.entity.RequestDetails;
 
 
 import java.sql.Connection;
@@ -65,9 +68,9 @@ public class NeederRequestController {
         boolean isNeederRequestValidated  = validateNeederRequest();
         if (!isNeederRequestValidated){return;}
 
-        var neederrequestdto = new NeederRequestDto(neeReq,needer_id,date,amount);
-        var bagdto = new BloodInventoryDto(blood_bag_id, donation_id,date,exdate,type);
-        var requestdto = new RequestDetailsDto(neeReq, blood_bag_id,type);
+        var neederrequestdto = new NeederRequest(neeReq,needer_id,date,amount);
+        var bagdto = new BloodInventory(blood_bag_id, donation_id,date,exdate,type);
+        var requestdto = new RequestDetails(neeReq, blood_bag_id,type);
 
         try {
             boolean isSaved = neederRequestBO.placeNeederRequest(neederrequestdto,bagdto,requestdto);

@@ -6,7 +6,9 @@ import lk.ijse.blood.DAO.DAOFactory;
 import lk.ijse.blood.dto.InventoryDto;
 import lk.ijse.blood.dto.OrderDetailsDto;
 import lk.ijse.blood.dto.SupplierOrdersDto;
+import lk.ijse.blood.entity.Inventory;
 import lk.ijse.blood.entity.OrderDetails;
+import lk.ijse.blood.entity.SupplierOrders;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ public class OrderDetailsBOImpl implements OrderDetailsBO {
     }
 
     @Override
-    public boolean placeOrderDetails(SupplierOrdersDto supplierOrdersDto, InventoryDto inventoryDto, OrderDetailsDto orderDetailsDto) throws SQLException, ClassNotFoundException {
+    public boolean placeOrderDetails(SupplierOrders supplierOrdersDto, Inventory inventoryDto, OrderDetails orderDetailsDto) throws SQLException, ClassNotFoundException {
         return orderDetailsDAO.placeOrderDetails(supplierOrdersDto,inventoryDto,orderDetailsDto);
     }
 }

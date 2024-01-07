@@ -11,24 +11,22 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.blood.BO.Custom.AdminBO;
 import lk.ijse.blood.BO.Custom.EmployeeBO;
+import lk.ijse.blood.BO.Custom.Impl.AdminBOImpl;
 import lk.ijse.blood.BO.Custom.Impl.EmployeeBOImpl;
 import lk.ijse.blood.db.DbConnection;
-import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.EmployeeDto;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.dto.tm.EmployeeTm;
-import lk.ijse.blood.model.AdminModel;
 
 
-import javax.lang.model.element.Name;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -75,6 +73,8 @@ public class EmployeeFormController {
     private TextField txtRole;
 
     EmployeeBO employeeBO = new EmployeeBOImpl();
+
+    AdminBO adminBO = new AdminBOImpl();
 
     public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
@@ -206,19 +206,13 @@ public class EmployeeFormController {
         }
 
 
-        /*String Role = txtRole.getText();
-        boolean isRoleValidated = Pattern.compile("^[A-z]").matcher(Role).matches();
-        if (!isRoleValidated) {
-            txtRole.requestFocus();
-        }*/
-
         return true;
     }
 
     private void loadAllUsers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<UserDto> userList = AdminModel.loadAllUsers();
+            List<UserDto> userList = adminBO.loadAllAdmin();
             for (UserDto userDto : userList) {
                 obList.add(userDto.getUser_id());
             }
@@ -254,12 +248,5 @@ public class EmployeeFormController {
 
     }
 }
-
-
-
-
-
-
-
 
 

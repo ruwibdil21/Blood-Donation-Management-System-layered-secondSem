@@ -14,6 +14,9 @@ import lk.ijse.blood.BO.Custom.SupplierBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
 import lk.ijse.blood.dto.tm.OrderDetailsTm;
+import lk.ijse.blood.entity.Inventory;
+import lk.ijse.blood.entity.OrderDetails;
+import lk.ijse.blood.entity.SupplierOrders;
 
 
 import java.sql.Connection;
@@ -136,9 +139,9 @@ public class OrderDetailsController {
             return;
         }
 
-        var supplierOrdersdto = new SupplierOrdersDto(supOder_id, sup_id, date, amount);
-        var inventorydto = new InventoryDto(med_id, date, blood_type);
-        var orderDetailsdto = new OrderDetailsDto(supOder_id, med_id, description);
+        var supplierOrdersdto = new SupplierOrders(supOder_id, sup_id, date, amount);
+        var inventorydto = new Inventory(med_id, date, blood_type);
+        var orderDetailsdto = new OrderDetails(supOder_id, med_id, description);
 
         try {
             boolean isSaved = orderDetailsBO.placeOrderDetails(supplierOrdersdto, inventorydto, orderDetailsdto);
