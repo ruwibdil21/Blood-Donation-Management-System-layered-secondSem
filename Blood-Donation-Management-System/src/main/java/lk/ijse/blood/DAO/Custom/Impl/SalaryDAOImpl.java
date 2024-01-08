@@ -1,8 +1,7 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.SalaryDAO;
+import lk.ijse.blood.dao.Custom.SalaryDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.SalaryDto;
 import lk.ijse.blood.entity.Salary;
 
 import java.sql.ResultSet;

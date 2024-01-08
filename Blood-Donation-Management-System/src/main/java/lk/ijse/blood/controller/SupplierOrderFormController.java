@@ -9,8 +9,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.blood.BO.Custom.Impl.SupplierOrderBOImpl;
-import lk.ijse.blood.BO.Custom.SupplierOrderBO;
+import lk.ijse.blood.bo.Custom.Impl.SupplierOrderBOImpl;
+import lk.ijse.blood.bo.Custom.SupplierOrderBO;
 import lk.ijse.blood.dto.SupplierOrdersDto;
 import lk.ijse.blood.dto.tm.SupplierOrdersTm;
 

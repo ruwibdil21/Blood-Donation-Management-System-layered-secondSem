@@ -1,14 +1,11 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.InventoryDAO;
-import lk.ijse.blood.DAO.Custom.OrderDetailsDAO;
-import lk.ijse.blood.DAO.Custom.SupplierOrderDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.dao.Custom.InventoryDAO;
+import lk.ijse.blood.dao.Custom.OrderDetailsDAO;
+import lk.ijse.blood.dao.Custom.SupplierOrderDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.Util.TransactionUtil;
-import lk.ijse.blood.dto.InventoryDto;
-import lk.ijse.blood.dto.OrderDetailsDto;
-import lk.ijse.blood.dto.SupplierOrdersDto;
 import lk.ijse.blood.entity.Inventory;
 import lk.ijse.blood.entity.OrderDetails;
 import lk.ijse.blood.entity.SupplierOrders;

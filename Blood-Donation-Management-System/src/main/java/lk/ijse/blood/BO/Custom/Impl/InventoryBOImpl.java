@@ -1,8 +1,8 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.InventoryBO;
-import lk.ijse.blood.DAO.Custom.InventoryDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.InventoryBO;
+import lk.ijse.blood.dao.Custom.InventoryDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.InventoryDto;
 import lk.ijse.blood.entity.Inventory;
 

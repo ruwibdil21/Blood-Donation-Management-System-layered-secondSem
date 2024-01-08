@@ -1,11 +1,9 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.DonationBO;
-import lk.ijse.blood.DAO.Custom.DonationDAO;
-import lk.ijse.blood.DAO.DAOFactory;
-import lk.ijse.blood.dto.BloodInventoryDto;
+import lk.ijse.blood.bo.Custom.DonationBO;
+import lk.ijse.blood.dao.Custom.DonationDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.DonationDto;
-import lk.ijse.blood.entity.BloodInventory;
 import lk.ijse.blood.entity.Donation;
 
 import java.sql.SQLException;

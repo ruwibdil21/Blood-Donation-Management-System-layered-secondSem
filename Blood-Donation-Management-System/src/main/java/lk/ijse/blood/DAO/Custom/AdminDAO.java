@@ -1,6 +1,6 @@
-package lk.ijse.blood.DAO.Custom;
+package lk.ijse.blood.dao.Custom;
 
-import lk.ijse.blood.DAO.CrudDAO;
+import lk.ijse.blood.dao.CrudDAO;
 import lk.ijse.blood.entity.User;
 
 import java.sql.SQLException;

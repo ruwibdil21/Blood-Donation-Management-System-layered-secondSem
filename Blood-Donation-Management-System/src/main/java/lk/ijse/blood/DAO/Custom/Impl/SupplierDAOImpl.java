@@ -1,6 +1,6 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.SupplierDAO;
+import lk.ijse.blood.dao.Custom.SupplierDAO;
 import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.entity.Supplier;
 

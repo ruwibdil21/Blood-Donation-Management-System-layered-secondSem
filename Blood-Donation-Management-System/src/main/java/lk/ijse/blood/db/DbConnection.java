@@ -10,7 +10,7 @@ public class DbConnection {
         connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/Blood_Donation_Management_System",
                 "root",
-                "Ijse@1234"
+                "1234"
         );
     }
 

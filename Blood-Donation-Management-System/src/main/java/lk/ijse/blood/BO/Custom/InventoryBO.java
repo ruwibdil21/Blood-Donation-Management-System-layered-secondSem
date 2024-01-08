@@ -1,7 +1,6 @@
-package lk.ijse.blood.BO.Custom;
+package lk.ijse.blood.bo.Custom;
 
-import lk.ijse.blood.BO.SuperBO;
-import lk.ijse.blood.dto.EmployeeDto;
+import lk.ijse.blood.bo.SuperBO;
 import lk.ijse.blood.dto.InventoryDto;
 
 import java.sql.SQLException;

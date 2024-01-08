@@ -8,8 +8,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.blood.BO.Custom.AdminBO;
-import lk.ijse.blood.BO.Custom.Impl.AdminBOImpl;
+import lk.ijse.blood.bo.Custom.AdminBO;
+import lk.ijse.blood.bo.Custom.Impl.AdminBOImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;

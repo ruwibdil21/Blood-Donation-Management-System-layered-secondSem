@@ -1,6 +1,6 @@
-package lk.ijse.blood.BO;
+package lk.ijse.blood.bo;
 
-import lk.ijse.blood.BO.Custom.Impl.*;
+import lk.ijse.blood.bo.Custom.Impl.*;
 
 
 

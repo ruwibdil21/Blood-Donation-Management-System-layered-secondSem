@@ -1,8 +1,7 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.DonationDAO;
+import lk.ijse.blood.dao.Custom.DonationDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.DonationDto;
 import lk.ijse.blood.entity.Donation;
 
 import java.sql.ResultSet;

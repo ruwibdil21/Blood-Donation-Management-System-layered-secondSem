@@ -10,11 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.blood.BO.Custom.DonationBO;
-import lk.ijse.blood.BO.Custom.Impl.DonationBOImpl;
+import lk.ijse.blood.bo.Custom.DonationBO;
+import lk.ijse.blood.bo.Custom.Impl.DonationBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonationDto;
-import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.tm.DonationTm;
 
 import java.io.IOException;

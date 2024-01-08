@@ -9,8 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.blood.BO.Custom.Impl.InventoryBOImpl;
-import lk.ijse.blood.BO.Custom.InventoryBO;
+import lk.ijse.blood.bo.Custom.Impl.InventoryBOImpl;
+import lk.ijse.blood.bo.Custom.InventoryBO;
 import lk.ijse.blood.dto.InventoryDto;
 import lk.ijse.blood.dto.tm.InventoryTm;
 
@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class InventoryController {
     @FXML

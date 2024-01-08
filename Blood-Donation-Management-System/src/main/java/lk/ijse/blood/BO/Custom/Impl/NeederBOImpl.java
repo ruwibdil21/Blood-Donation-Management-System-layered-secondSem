@@ -1,10 +1,9 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.NeederBO;
-import lk.ijse.blood.DAO.Custom.NeederDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.NeederBO;
+import lk.ijse.blood.dao.Custom.NeederDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.NeederDto;
-import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.entity.Needer;
 
 import java.sql.SQLException;

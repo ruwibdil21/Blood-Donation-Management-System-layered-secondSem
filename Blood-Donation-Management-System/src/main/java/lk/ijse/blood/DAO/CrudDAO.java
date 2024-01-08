@@ -1,7 +1,4 @@
-package lk.ijse.blood.DAO;
-
-import lk.ijse.blood.dto.AttendanceDto;
-import lk.ijse.blood.dto.SupplierDto;
+package lk.ijse.blood.dao;
 
 import java.sql.SQLException;
 import java.util.List;

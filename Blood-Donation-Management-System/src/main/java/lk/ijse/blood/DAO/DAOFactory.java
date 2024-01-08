@@ -1,6 +1,6 @@
-package lk.ijse.blood.DAO;
+package lk.ijse.blood.dao;
 
-import lk.ijse.blood.DAO.Custom.Impl.*;
+import lk.ijse.blood.dao.Custom.Impl.*;
 
 
 public class DAOFactory {

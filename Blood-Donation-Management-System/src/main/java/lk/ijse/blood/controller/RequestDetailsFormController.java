@@ -9,9 +9,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.blood.BO.Custom.Impl.RequestDetailsBOImpl;
-import lk.ijse.blood.BO.Custom.RequestDetailsBO;
-import lk.ijse.blood.dto.DonorDto;
+import lk.ijse.blood.bo.Custom.Impl.RequestDetailsBOImpl;
+import lk.ijse.blood.bo.Custom.RequestDetailsBO;
 import lk.ijse.blood.dto.RequestDetailsDto;
 import lk.ijse.blood.dto.tm.RequestDetailsTm;
 

@@ -1,8 +1,8 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.AdminBO;
-import lk.ijse.blood.DAO.Custom.AdminDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.AdminBO;
+import lk.ijse.blood.dao.Custom.AdminDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.entity.User;
 

@@ -10,18 +10,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.blood.BO.Custom.DonorBO;
-import lk.ijse.blood.BO.Custom.Impl.DonorBOImpl;
+import lk.ijse.blood.bo.Custom.DonorBO;
+import lk.ijse.blood.bo.Custom.Impl.DonorBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.tm.DonorTm;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
 
