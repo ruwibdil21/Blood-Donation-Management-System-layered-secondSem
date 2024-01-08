@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,11 +18,9 @@
    <children>
       <Pane layoutX="14.0" layoutY="52.0" prefHeight="384.0" prefWidth="295.0">
          <children>
-            <TextField fx:id="txtBloodBag_id" layoutX="22.0" layoutY="45.0" prefHeight="25.0" prefWidth="214.0" />
-            <TextField fx:id="txtDonation_id" layoutX="22.0" layoutY="107.0" prefHeight="25.0" prefWidth="214.0" />
-            <TextField fx:id="txtBlood_Type" layoutX="22.0" layoutY="298.0" prefHeight="25.0" prefWidth="214.0" />
-            <DatePicker fx:id="txtDonation_Date" layoutX="22.0" layoutY="169.0" prefHeight="25.0" prefWidth="214.0" />
             <DatePicker fx:id="txtEx_Date" layoutX="22.0" layoutY="233.0" prefHeight="25.0" prefWidth="214.0" />
+            <TextField fx:id="txtBloodBag_id" layoutX="22.0" layoutY="45.0" prefHeight="25.0" prefWidth="214.0" />
+            <DatePicker fx:id="txtDonation_Date" layoutX="22.0" layoutY="169.0" prefHeight="25.0" prefWidth="214.0" />
             <Text layoutX="22.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BloodBag_id">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -41,7 +41,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="24.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blood_Type">
+            <Text layoutX="24.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blood_Type">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -61,6 +61,8 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
+            <ComboBox fx:id="cmbDId" layoutX="24.0" layoutY="115.0" prefHeight="25.0" prefWidth="214.0" />
+            <ChoiceBox fx:id="cmbType" layoutX="24.0" layoutY="303.0" prefHeight="25.0" prefWidth="214.0" />
          </children>
       </Pane>
       <ImageView fitHeight="348.0" fitWidth="408.0" layoutX="336.0" layoutY="102.0" opacity="0.67">

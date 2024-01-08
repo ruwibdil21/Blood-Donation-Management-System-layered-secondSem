@@ -142,7 +142,6 @@ public class SupplierFormController {
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setTitle("Blood inventory Form");
-            stage.setAlwaysOnTop(true);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
