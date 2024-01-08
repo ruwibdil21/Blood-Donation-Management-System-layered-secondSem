@@ -69,8 +69,14 @@ public class DonorDAOImpl implements DonorDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT D_id FROM donor ORDER BY D_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("D_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newDonorId = Integer.parseInt(numericPart) + 1;
+            return String.format("D%03d", newDonorId);
+        } else {
+            return "D001";
+        }
     }
-
-
 }

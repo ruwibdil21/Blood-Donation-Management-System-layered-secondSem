@@ -32,8 +32,14 @@ public class DonorBOImpl implements DonorBO {
     @Override
     public DonorDto searchDonor(String id) throws SQLException, ClassNotFoundException {
         Donor donor =donorDAO.search(id);
-        DonorDto donorDto = new DonorDto(donor.getD_id(), donor.getFirstName(), donor.getLastName(),donor.getType(),donor.getDob(),donor.getTel(),donor.getLastDate());
-        return donorDto;
+        return new DonorDto(
+                donor.getD_id(),
+                donor.getFirstName(),
+                donor.getLastName(),
+                donor.getType(),
+                donor.getDob(),
+                donor.getTel(),
+                donor.getLastDate());
     }
 
     @Override
