@@ -19,7 +19,13 @@ public class EmployeeBOImpl implements EmployeeBO {
         List<EmployeeDto> employeeDtos = new ArrayList<>();
 
         for (Employee employee : employeeList) {
-            employeeDtos.add(new EmployeeDto(employee.getEmp_id(), employee.getUser_id(), employee.getName(), employee.getAddress(), employee.getRole(), employee.getDOB()));
+            employeeDtos.add(new EmployeeDto(
+                    employee.getEmp_id(),
+                    employee.getUser_id(),
+                    employee.getName(),
+                    employee.getAddress(),
+                    employee.getRole(),
+                    employee.getDOB()));
         }
         return employeeDtos;
     }

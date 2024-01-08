@@ -4,9 +4,7 @@ import lk.ijse.blood.bo.Custom.OrderDetailsBO;
 import lk.ijse.blood.dao.Custom.OrderDetailsDAO;
 import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.OrderDetailsDto;
-import lk.ijse.blood.entity.Inventory;
-import lk.ijse.blood.entity.OrderDetails;
-import lk.ijse.blood.entity.SupplierOrders;
+import lk.ijse.blood.entity.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,12 +14,11 @@ public class OrderDetailsBOImpl implements OrderDetailsBO {
     OrderDetailsDAO orderDetailsDAO = (OrderDetailsDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDERDETAILS);
     @Override
     public List<OrderDetailsDto> loadAllOrderDetails() throws SQLException, ClassNotFoundException {
-        List<OrderDetails>orderDetailsList = orderDetailsDAO.loadAll();
+        List<OrderDetails> orderDetailsList = orderDetailsDAO.loadAll();
         List<OrderDetailsDto> orderDetailsDtos = new ArrayList<>();
 
         for (OrderDetails orderDetails :orderDetailsList){
             orderDetailsDtos.add(new OrderDetailsDto(orderDetails.getOrder_id(),orderDetails.getMed_id(),orderDetails.getDescription()));
-
         }
         return orderDetailsDtos;
     }

@@ -15,12 +15,16 @@ public class SupplierBOImpl implements SupplierBO {
     SupplierDAO supplierDAO = (SupplierDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SUPPLIER);
     @Override
     public List<SupplierDto> loadAllSupplier() throws SQLException, ClassNotFoundException {
-        List<Supplier>supplierList = supplierDAO.loadAll();
-        List<SupplierDto>supplierDtos =new ArrayList<>();
+        List<Supplier> supplierList = supplierDAO.loadAll();
+        List<SupplierDto> supplierDtos = new ArrayList<>();
 
         for (Supplier supplier :supplierList){
-            supplierDtos.add(new SupplierDto(supplier.getSup_id(),supplier.getUser_id(),supplier.getName(),supplier.getAddress(),supplier.getTel()));
-
+            supplierDtos.add(new SupplierDto(
+                    supplier.getSup_id(),
+                    supplier.getUser_id(),
+                    supplier.getName(),
+                    supplier.getAddress(),
+                    supplier.getTel()));
         }
         return supplierDtos;
     }

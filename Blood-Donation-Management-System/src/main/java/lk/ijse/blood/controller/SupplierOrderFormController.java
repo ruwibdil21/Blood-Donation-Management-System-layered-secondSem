@@ -3,22 +3,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.blood.bo.Custom.Impl.SupplierBOImpl;
 import lk.ijse.blood.bo.Custom.Impl.SupplierOrderBOImpl;
+import lk.ijse.blood.bo.Custom.SupplierBO;
 import lk.ijse.blood.bo.Custom.SupplierOrderBO;
+import lk.ijse.blood.dto.SupplierDto;
 import lk.ijse.blood.dto.SupplierOrdersDto;
 import lk.ijse.blood.dto.tm.SupplierOrdersTm;
 
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class SupplierOrderFormController {
+    public ComboBox cmbSupId;
+    public DatePicker DtpDate;
     @FXML
     private AnchorPane SupplierOrder;
 
@@ -36,8 +39,6 @@ public class SupplierOrderFormController {
 
     @FXML
     private TableView<SupplierOrdersTm> tblSupplierOrder;
-    @FXML
-    private TextField txtDate;
 
     @FXML
     private TextField txtAmount;
@@ -45,21 +46,25 @@ public class SupplierOrderFormController {
     @FXML
     private TextField txtOrderId;
 
-    @FXML
-    private TextField txtSupplierId;
-
     SupplierOrderBO supplierOrderBO = new SupplierOrderBOImpl();
+    SupplierBO supplierBO = new SupplierBOImpl();
 
-    public void initialize() throws ClassNotFoundException {
-        loadAllSupplierOrders();
-        setCellValueFactory();
+    public void initialize() {
+        try {
+            loadAllSupplierOrders();
+            setCellValueFactory();
+            autoGenarateOrderId();
+            loadAllSuppliers();
+            DtpDate.setValue(LocalDate.now());
+        } catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
     private void setCellValueFactory() {
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("supOrder_id"));
         colSupplierId.setCellValueFactory(new PropertyValueFactory<>("supplier_id"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-
     }
 
     public void loadAllSupplierOrders() throws ClassNotFoundException {
@@ -83,15 +88,30 @@ public class SupplierOrderFormController {
         }
     }
 
+    private void loadAllSuppliers() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
+        try {
+            List<SupplierDto> supList = supplierBO.loadAllSupplier();
+
+            for (SupplierDto supplierDto  : supList) {
+                obList.add(supplierDto.getSup_id());
+            }
+            cmbSupId.setItems(obList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
 
     @FXML
     public void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
-        String supplier_id = txtSupplierId.getText();
+        String orderIdText = txtOrderId.getText();
 
         try{
-            SupplierOrdersDto dto = supplierOrderBO.searchSupplierOrders(supplier_id);
+            SupplierOrdersDto dto = supplierOrderBO.searchSupplierOrders(orderIdText);
             if(dto != null) {
-                boolean isDeleted = supplierOrderBO.deleteSupplierOrders(supplier_id);
+                boolean isDeleted = supplierOrderBO.deleteSupplierOrders(orderIdText);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "SupplierOrders Delete Succesfull!!!").show();
                     clearFields();
@@ -105,19 +125,12 @@ public class SupplierOrderFormController {
         }
     }
 
-
-
     @FXML
     public void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String order_id = txtOrderId.getText();
-        String supplier_id = txtSupplierId.getText();
-        String date = txtDate.getText();
+        String supplier_id = String.valueOf(cmbSupId.getValue());
+        String date = String.valueOf(DtpDate.getValue());
         String amount = txtAmount.getText();
-
-
-        if (order_id.isEmpty() || supplier_id.isEmpty() || date.isEmpty() || amount.isEmpty()){
-            new Alert(Alert.AlertType.ERROR, "Please fill out all fields").show();
-        }
 
         var dto = new SupplierOrdersDto(order_id,supplier_id,date,amount);
 
@@ -125,21 +138,18 @@ public class SupplierOrderFormController {
             boolean isSaved = supplierOrderBO.saveSupplierOrders(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "SupplierOrder Added Succesfull").show();
-                clearFields();
+                initialize();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
     private void clearFields() {
-        txtOrderId.setText("");
-        txtSupplierId.setText("");
-        txtDate.setText("");
         txtAmount.setText("");
-
     }
 
-    public void btnSingupOnAction(ActionEvent actionEvent) {
+    private void autoGenarateOrderId() throws SQLException, ClassNotFoundException {
+        txtOrderId.setText(supplierOrderBO.generateSupOrder_id());
     }
 }
 

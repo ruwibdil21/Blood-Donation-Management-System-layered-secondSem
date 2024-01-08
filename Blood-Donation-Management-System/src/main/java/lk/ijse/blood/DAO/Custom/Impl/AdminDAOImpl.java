@@ -20,7 +20,7 @@ public class AdminDAOImpl implements AdminDAO {
                     resultSet.getString(1),
                     resultSet.getString(2),
                     resultSet.getString(3));
-        userList.add(userDto);
+            userList.add(userDto);
         }
         return userList;
     }

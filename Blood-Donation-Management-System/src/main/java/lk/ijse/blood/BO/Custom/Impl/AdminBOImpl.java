@@ -18,7 +18,10 @@ public class AdminBOImpl implements AdminBO {
         List<UserDto> userDtos = new ArrayList<>();
 
         for (User user : users){
-            userDtos.add(new UserDto(user.getUser_id(),user.getName(),user.getPassword()));
+            userDtos.add(new UserDto(
+                    user.getUser_id(),
+                    user.getName(),
+                    user.getPassword()));
         }
         return userDtos;
     }
