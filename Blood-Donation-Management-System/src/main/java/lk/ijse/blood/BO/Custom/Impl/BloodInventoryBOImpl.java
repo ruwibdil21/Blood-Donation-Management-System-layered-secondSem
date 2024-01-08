@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BloodInventoryBOImpl implements BloodInventoryBO {
-
     BloodInventoryDAO bloodInventoryDAO = (BloodInventoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BLOODINVENTORY);
     @Override
     public List<BloodInventoryDto> loadAllBloodInventoy() throws SQLException, ClassNotFoundException {

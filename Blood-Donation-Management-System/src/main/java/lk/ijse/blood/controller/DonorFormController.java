@@ -20,11 +20,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class DonorFormController {
-
+    public ChoiceBox cmdBloodType;
     @FXML
     private DatePicker txtL_date;
 
@@ -60,16 +61,18 @@ public class DonorFormController {
     @FXML
     private TextField txtTel;
 
-    @FXML
-    private TextField txtType;
-
     DonorBO donorBO = new DonorBOImpl();
 
-    public void initialize() throws SQLException, ClassNotFoundException {
-        setCellValueFactory();
-        loadAllDonors();
-        autoGenarateId();
-
+    public void initialize(){
+        try {
+            setCellValueFactory();
+            loadAllDonors();
+            autoGenarateId();
+            cmdBloodType.getItems().addAll("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
+            cmdBloodType.setValue("O+");
+        } catch (SQLException | ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
@@ -89,7 +92,6 @@ public class DonorFormController {
     }
 
     private void loadAllDonors() throws ClassNotFoundException {
-
         ObservableList<DonorTm> obList = FXCollections.observableArrayList();
 
         try {
@@ -114,7 +116,6 @@ public class DonorFormController {
 
         try {
             DonorDto dto = donorBO.searchDonor(d_id);
-
             if (dto != null) {
                 fillFields(dto);
             } else {
@@ -131,7 +132,6 @@ public class DonorFormController {
         txtFirstName.setText(dto.getFirstName());
         txtLastName.setText(dto.getLastName());
         txtTel.setText(String.valueOf(dto.getTel()));
-        txtType.setText(dto.getType());
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
@@ -160,7 +160,7 @@ public class DonorFormController {
         String lastName = txtLastName.getText();
         int tel = Integer.parseInt(txtTel.getText());
         String dob = String.valueOf(txtDob.getValue());
-        String type = txtType.getText();
+        String type = String.valueOf(cmdBloodType.getValue());
         String l_date = String.valueOf(txtL_date.getValue());
 
         boolean isDonorValidated = validateDonor();
@@ -185,7 +185,7 @@ public class DonorFormController {
         String lastName = txtLastName.getText();
         String dob = String.valueOf(txtDob.getValue());
         int tel = Integer.parseInt(txtTel.getText());
-        String type = txtType.getText();
+        String type = String.valueOf(cmdBloodType.getValue());
         String l_date = String.valueOf(txtL_date.getValue());
 
         boolean isDonorValidated = validateDonor();
@@ -211,7 +211,7 @@ public class DonorFormController {
         txtLastName.setText("");
         txtDob.setValue(null);
         txtTel.setText("");
-        txtType.setText("");
+        cmdBloodType.setValue(null);
         txtL_date.setValue(null);
     }
 
@@ -228,42 +228,15 @@ public class DonorFormController {
             txtLastName.requestFocus();
         }
 
-
         String tel = txtTel.getText();
         boolean isTelValidated = Pattern.compile("^[0-9]{10}$").matcher(tel).matches();
         if (!isTelValidated) {
             txtTel.requestFocus();
         }
-
-        String bloodType = txtType.getText();
-        boolean isbloodTypeValidated = Pattern.compile("^[A-z]{1,20}$").matcher(bloodType).matches();
-        if (!isbloodTypeValidated){
-            txtType.requestFocus();
-        }
         return true;
     }
 
-    private void autoGenarateId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT D_id FROM donor ORDER BY D_id DESC LIMIT 1";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
-        boolean isExists = resultSet.next();
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("D");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtId.setText("D00" + id);
-            } else if (id < 100) {
-                txtId.setText("D0" + id);
-            } else {
-                txtId.setText("D" + id);
-            }
-        } else {
-            txtId.setText("D001");
-        }
+    private void autoGenarateId() throws SQLException, ClassNotFoundException {
+        txtId.setText(donorBO.generateDId());
     }
 }
