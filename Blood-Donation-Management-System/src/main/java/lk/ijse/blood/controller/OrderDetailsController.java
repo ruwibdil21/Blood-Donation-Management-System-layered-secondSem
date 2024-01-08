@@ -9,8 +9,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.blood.bo.Custom.Impl.OrderDetailsBOImpl;
 import lk.ijse.blood.bo.Custom.Impl.SupplierBOImpl;
+import lk.ijse.blood.bo.Custom.Impl.SupplierOrderBOImpl;
 import lk.ijse.blood.bo.Custom.OrderDetailsBO;
 import lk.ijse.blood.bo.Custom.SupplierBO;
+import lk.ijse.blood.bo.Custom.SupplierOrderBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
 import lk.ijse.blood.dto.tm.OrderDetailsTm;
@@ -27,8 +29,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class OrderDetailsController {
-
-
     @FXML
     private DatePicker DtpDate;
 
@@ -78,14 +78,20 @@ public class OrderDetailsController {
     private TextField txtOrderid;
 
     OrderDetailsBO orderDetailsBO = new OrderDetailsBOImpl();
-    SupplierBO supplierrBO = new SupplierBOImpl();
-    public void initialize() throws SQLException, ClassNotFoundException {
-        setCellValueFactory();
-        //loadAllOrderDetails();
-        autoGenarateInventoryId();
-        autoGenarateOrderId();
-        loadAllSuppliers();
-        DtpDate.setValue(LocalDate.now());
+    SupplierOrderBO supplierOrderBO = new SupplierOrderBOImpl();
+    SupplierBO supplierBO = new SupplierBOImpl();
+
+    public void initialize(){
+        try {
+            //setCellValueFactory();
+            //loadAllOrderDetails();
+            autoGenarateInventoryId();
+            autoGenarateOrderId();
+            loadAllSuppliers();
+            DtpDate.setValue(LocalDate.now());
+        } catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
 
     private void setCellValueFactory() {
@@ -98,31 +104,23 @@ public class OrderDetailsController {
         colDecription.setCellValueFactory(new PropertyValueFactory<>("Description"));
     }
 
-  /*  private static void loadAllOrderDetails() throws SQLException {
-        var model = new OrderDetailsModel();
-
+   private void loadAllOrderDetails() throws SQLException {
         ObservableList<OrderDetailsTm> obList = FXCollections.observableArrayList();
-
         try {
-            List<OrderDetailsDto> dtoList = OrderDetailsModel.loadAllOrderDetails();
+            List<OrderDetailsDto> dtoList = orderDetailsBO.loadAllOrderDetails();
 
             for (OrderDetailsDto dto : dtoList) {
                 obList.add(new OrderDetailsTm(
                         dto.getOrder_id(),
                         dto.getMed_id(),
-                        dto.getSup_id(),
-                        dto.getAmount(),
-                        dto.getBlood_type(),
-                        dto.getDate(),
                         dto.getDescription()
-
                 ));
             }
             tblOrder_details.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-    }*/
+    }
 
     public void btnSaveOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String supOder_id = txtOrderid.getText();
@@ -148,7 +146,7 @@ public class OrderDetailsController {
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Order Details Added Succesfull").show();
                 clearFields();
-                initialize();
+                //initialize();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -161,8 +159,6 @@ public class OrderDetailsController {
         if (!isBloodTypeValidated) {
             txtBlood_type.requestFocus();
         }
-
-
         return true;
     }
 
@@ -177,7 +173,7 @@ public class OrderDetailsController {
     private void loadAllSuppliers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<SupplierDto> supList = supplierrBO.loadAllSupplier();
+            List<SupplierDto> supList = supplierBO.loadAllSupplier();
             for (SupplierDto supplierDto : supList) {
                 obList.add(supplierDto.getSup_id());
             }
@@ -188,53 +184,11 @@ public class OrderDetailsController {
     }
 
 
-    private void autoGenarateOrderId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT SupOrder_id FROM supplier_orders ORDER BY SupOrder_id DESC LIMIT 1";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("Sup_Or");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtOrderid.setText("Sup_Or00" + id);
-            } else if (id < 100) {
-                txtOrderid.setText("Sup_Or0" + id);
-            } else {
-                txtOrderid.setText("Sup_Or" + id);
-            }
-        } else {
-            txtOrderid.setText("Sup_Or001");
-        }
+    private void autoGenarateOrderId() throws SQLException, ClassNotFoundException {
+        txtOrderid.setText(supplierOrderBO.generateSupOrder_id());
     }
 
-    private void autoGenarateInventoryId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT Med_id FROM medical_inventory ORDER BY Med_id DESC LIMIT 1";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("Med_In");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtMedid.setText("Med_In00" + id);
-            } else if (id < 100) {
-                txtMedid.setText("Med_In0" + id);
-            } else {
-                txtMedid.setText("Med_In" + id);
-            }
-        } else {
-            txtMedid.setText("Med_In001");
-        }
+    private void autoGenarateInventoryId() throws SQLException, ClassNotFoundException {
+        txtMedid.setText(orderDetailsBO.generateOrderDetails());
     }
 }

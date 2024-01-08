@@ -14,5 +14,4 @@ public class OrderDetailsDto {
     private String Order_id;
     private String Med_id;
     private String Description;
-
 }

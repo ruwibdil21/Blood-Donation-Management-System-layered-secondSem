@@ -15,25 +15,18 @@ import lk.ijse.blood.bo.Custom.AdminBO;
 import lk.ijse.blood.bo.Custom.EmployeeBO;
 import lk.ijse.blood.bo.Custom.Impl.AdminBOImpl;
 import lk.ijse.blood.bo.Custom.Impl.EmployeeBOImpl;
-import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.EmployeeDto;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.dto.tm.EmployeeTm;
 
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-
 public class EmployeeFormController {
-
     public DatePicker DtpDob;
     public ComboBox cmbUserid;
     @FXML
@@ -76,11 +69,15 @@ public class EmployeeFormController {
 
     AdminBO adminBO = new AdminBOImpl();
 
-    public void initialize() throws SQLException, ClassNotFoundException {
-        setCellValueFactory();
-        loadAllEmployees();
-        loadAllUsers();
-        autoGenarateId();
+    public void initialize() {
+        try {
+            loadAllEmployees();
+            setCellValueFactory();
+            loadAllUsers();
+            autoGenarateId();
+        } catch (SQLException| ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
 
     private void setCellValueFactory() {
@@ -93,9 +90,7 @@ public class EmployeeFormController {
     }
 
     public void loadAllEmployees() throws ClassNotFoundException {
-
         ObservableList<EmployeeTm> obList = FXCollections.observableArrayList();
-
         try {
             List<EmployeeDto> dtoList = employeeBO.loadAllEmployee();
 
@@ -107,7 +102,6 @@ public class EmployeeFormController {
                         dto.getAddress(),
                         dto.getRole(),
                         dto.getDOB()
-
                 ));
             }
             tblEmployee.setItems(obList);
@@ -135,7 +129,7 @@ public class EmployeeFormController {
         String name = txtName.getText();
         String address = txtAddress.getText();
         String role = txtRole.getText();
-        Date dob = Date.valueOf(DtpDob.getValue());
+        String dob = String.valueOf(DtpDob.getValue());
 
         boolean isEmployeeValidated = validateEmloyee();
         if (!isEmployeeValidated){return;}
@@ -153,8 +147,6 @@ public class EmployeeFormController {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-
-
     private void clearFields() {
         txtEmpId.setText("");
         cmbUserid.setValue("");
@@ -193,19 +185,17 @@ public class EmployeeFormController {
     }
 
     private boolean validateEmloyee() {
-        /*String name = txtName.getText();
-        boolean isNameValidated = Pattern.compile("^[A-z]").matcher(name).matches();
+        String name = txtName.getText();
+        boolean isNameValidated = Pattern.compile("^[A-z]{1,20}$").matcher(name).matches();
         if (!isNameValidated) {
             txtName.requestFocus();
-        }*/
+        }
 
         String Address = txtAddress.getText();
         boolean isAddressValidated = Pattern.compile("^[A-z]{1,20}$").matcher(Address).matches();
         if (!isAddressValidated) {
             txtAddress.requestFocus();
         }
-
-
         return true;
     }
 
@@ -222,30 +212,8 @@ public class EmployeeFormController {
         }
     }
 
-    private void autoGenarateId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT Emp_id FROM Employee ORDER BY Emp_id DESC LIMIT 1";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("E");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtEmpId.setText("E00" + id);
-            } else if (id < 100) {
-                txtEmpId.setText("E0" + id);
-            } else {
-                txtEmpId.setText("E" + id);
-            }
-        } else {
-            txtEmpId.setText("E001");
-        }
-
+    private void autoGenarateId() throws SQLException, ClassNotFoundException {
+        txtEmpId.setText(employeeBO.generateEmployee());
     }
 }
 

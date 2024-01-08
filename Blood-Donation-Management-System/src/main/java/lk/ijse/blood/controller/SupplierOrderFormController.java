@@ -63,7 +63,6 @@ public class SupplierOrderFormController {
     }
 
     public void loadAllSupplierOrders() throws ClassNotFoundException {
-
         ObservableList<SupplierOrdersTm> obList = FXCollections.observableArrayList();
 
         try{

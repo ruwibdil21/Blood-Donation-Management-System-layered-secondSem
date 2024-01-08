@@ -15,23 +15,17 @@ import lk.ijse.blood.bo.Custom.AdminBO;
 import lk.ijse.blood.bo.Custom.Impl.AdminBOImpl;
 import lk.ijse.blood.bo.Custom.Impl.SupplierBOImpl;
 import lk.ijse.blood.bo.Custom.SupplierBO;
-import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.SupplierDto;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.dto.tm.SupplierTm;
 
-
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class SupplierFormController {
-
     public ComboBox cmbUserid;
     @FXML
     private TableColumn<?, ?> colAddress;
@@ -69,10 +63,14 @@ public class SupplierFormController {
     SupplierBO supplierBO = new SupplierBOImpl();
     AdminBO adminBO = new AdminBOImpl();
     public void initialize() throws SQLException, ClassNotFoundException {
-        loadAllSuppliers();
-        setCellValueFactory();
-        loadAllUsers();
-        autoGenerateId();
+        try {
+            loadAllSuppliers();
+            setCellValueFactory();
+            loadAllUsers();
+            autoGenerateId();
+        } catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
 
     @FXML
@@ -95,7 +93,6 @@ public class SupplierFormController {
     }
 
     public void loadAllSuppliers() throws ClassNotFoundException {
-
         ObservableList<SupplierTm> obList = FXCollections.observableArrayList();
 
         try {
@@ -276,27 +273,8 @@ public class SupplierFormController {
         }
     }
 
-    private void autoGenerateId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        ResultSet resultSet = connection.prepareStatement("SELECT Sup_id FROM Supplier ORDER BY Sup_id DESC LIMIT 1").executeQuery();
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("Sup");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtSupId.setText("Sup00" + id);
-            } else if (id < 100) {
-                txtSupId.setText("Sup0" + id);
-            } else {
-                txtSupId.setText("Sup" + id);
-            }
-        } else {
-            txtSupId.setText("Sup001");
-        }
+    private void autoGenerateId() throws SQLException, ClassNotFoundException {
+        txtSupId.setText(supplierBO.generateSup_id());
     }
 }
 
