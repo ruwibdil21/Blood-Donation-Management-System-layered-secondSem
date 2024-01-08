@@ -11,9 +11,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.blood.bo.Custom.DonationBO;
+import lk.ijse.blood.bo.Custom.DonorBO;
 import lk.ijse.blood.bo.Custom.Impl.DonationBOImpl;
+import lk.ijse.blood.bo.Custom.Impl.DonorBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.DonationDto;
+import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.dto.tm.DonationTm;
 
 import java.io.IOException;
@@ -23,6 +26,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class DonationFormController {
+    public ChoiceBox cmdBloodType;
+    public ChoiceBox cmdHemoLevel;
     @FXML
     private TableView<DonationTm> tblDonation;
 
@@ -40,24 +45,18 @@ public class DonationFormController {
 
     @FXML
     private TableColumn<?, ?> colHemoglobinLevel;
-
     @FXML
     private TextField txtDoId;
-    @FXML
-    private TextField txtHemoglobinLevel;
-
-    @FXML
-    private TextField txtBloodType;
 
     @FXML
     private DatePicker txtDate;
-
     @FXML
     private AnchorPane donation;
     @FXML
     private ComboBox cmbDonorid;
-
     DonationBO donationBO = new DonationBOImpl();
+    DonorBO donorBO = new DonorBOImpl();
+
     @FXML
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/dashboard_form.fxml"));
@@ -68,26 +67,33 @@ public class DonationFormController {
         stage.centerOnScreen();
     }
 
-    public void initialize() throws SQLException, ClassNotFoundException {
-        setCellValueFactory();
-        loadAllDonations();
-       // loadAllDonors();
-        autoGenerateId();
-        txtDate.setValue(LocalDate.now());
+    public void initialize(){
+        try {
+            loadAllDonations();
+            setCellValueFactory();
+            loadAllDonors();
+            autoGenerateId();
+            txtDate.setValue(LocalDate.now());
+        } catch (SQLException | ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+
+        cmdBloodType.getItems().addAll("A+","A-","B+","B-","AB+","AB-","O+","O-");
+        cmdHemoLevel.getItems().addAll("12","13","14","15","16","17","18");
+        cmdBloodType.setValue("O+");
+        cmdHemoLevel.setValue("14");
     }
 
     private void setCellValueFactory() {
         colDonationId.setCellValueFactory(new PropertyValueFactory<>("Do_id"));
         colDonorId.setCellValueFactory(new PropertyValueFactory<>("D_id"));
-        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("Date"));
         colBloodType.setCellValueFactory(new PropertyValueFactory<>("Blood_type"));
         colHemoglobinLevel.setCellValueFactory(new PropertyValueFactory<>("Hemoglobin_level"));
     }
 
-    public void loadAllDonations() throws ClassNotFoundException {
-
+    public void loadAllDonations(){
         ObservableList<DonationTm> obList = FXCollections.observableArrayList();
-
         try {
             List<DonationDto> dtoList = donationBO.loadAllDonation();
 
@@ -95,14 +101,12 @@ public class DonationFormController {
                 obList.add(new DonationTm(
                         dto.getDo_id(),
                         dto.getD_id(),
-                        dto.getDate().toLocalDate(),
+                        dto.getDate(),
                         dto.getBlood_type(),
-                        dto.getHemoglobin_level()
-
-                        ));
+                        dto.getHemoglobin_level()));
             }
             tblDonation.setItems(obList);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -117,7 +121,7 @@ public class DonationFormController {
                 boolean isDeleted = donationBO.deleteDonation(do_id);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Donation Delete Succesfull!!!").show();
-                    clearFields();
+                    initialize();
                 }
             } else {
                 new Alert(Alert.AlertType.ERROR, "Donation Not Found!!!").show();
@@ -130,21 +134,16 @@ public class DonationFormController {
 
     private void fillFields(DonationDto dto) {
         txtDoId.setText(dto.getDo_id());
-        txtDate.setValue(dto.getDate().toLocalDate());
-        txtBloodType.setText(dto.getBlood_type());
-        txtHemoglobinLevel.setText(dto.getHemoglobin_level());
+        txtDate.setValue(LocalDate.parse(dto.getDate()));
     }
 
     @FXML
     void btnSaveOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         String do_id = txtDoId.getText();
         String d_id = String.valueOf(cmbDonorid.getValue());
-        Date date = Date.valueOf(txtDate.getValue());
-        String blood_type = txtBloodType.getText();
-        String hemoglobin_level = txtHemoglobinLevel.getText();
-
-        boolean isDonationValidated = validateDonation();
-        if (!isDonationValidated){return;}
+        String date = String.valueOf(txtDate.getValue());
+        String blood_type = String.valueOf(cmdBloodType.getValue());
+        String hemoglobin_level = String.valueOf(cmdHemoLevel.getValue());
 
         var dto = new DonationDto(do_id, d_id, date, blood_type, hemoglobin_level);
 
@@ -162,12 +161,9 @@ public class DonationFormController {
 
     @FXML
     public void btnSearchOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
-
         String do_id = txtDoId.getText();
-
         try {
             DonationDto dto = donationBO.searchDonation(do_id);
-
             if (dto != null) {
                 fillFields(dto);
             } else {
@@ -182,32 +178,12 @@ public class DonationFormController {
 
     private void clearFields() {
         txtDoId.setText("");
-        txtBloodType.setText("");
-        txtHemoglobinLevel.setText("");
     }
 
-
-    private boolean validateDonation() {
-       /* String hemoglobinLevel = txtHemoglobinLevel.getText();
-        boolean isHemoglobinLevelValidated = Pattern.compile("\"^[0-9] HB[^(P|S)](|[^G])\"").matcher(hemoglobinLevel).matches();
-        if (!isHemoglobinLevelValidated){
-            txtHemoglobinLevel.requestFocus();
-        }*/
-
-        String bloodType = txtBloodType.getText();
-        boolean isBloodTypeValidated = Pattern.compile("(A|B|AB|O)[+-]").matcher(bloodType).matches();
-        if (!isBloodTypeValidated){
-            txtBloodType.requestFocus();
-        }
-
-
-        return true;
-    }
-
-   /* private void loadAllDonors() throws SQLException, ClassNotFoundException {
+    private void loadAllDonors() throws SQLException, ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<DonorDto> donList = donationBO.loadAllDonors();
+            List<DonorDto> donList = donorBO.loadAllDonor();
 
             for (DonorDto donorDto : donList) {
                 obList.add(donorDto.getD_id());
@@ -217,26 +193,9 @@ public class DonationFormController {
             throw new RuntimeException(e);
         }
     }
-*/
-    private void autoGenerateId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT donation_id FROM donation ORDER BY donation_id DESC LIMIT 1");
-        if (rst.next()) {
-            String tempId = rst.getString(1);
-            String[] arr = tempId.split("DT");
-            int id = Integer.parseInt(arr[1]);
-            id++;
-            if (id < 10) {
-                txtDoId.setText("DT00" + id);
-            } else if (id < 100) {
-                txtDoId.setText("DT0" + id);
-            } else {
-                txtDoId.setText("DT" + id);
-            }
-        } else {
-            txtDoId.setText("DT001");
-        }
+
+    private void autoGenerateId() throws SQLException, ClassNotFoundException {
+        txtDoId.setText(donationBO.autogenerateDonationId());
     }
 }
 
