@@ -55,6 +55,7 @@
                </font>
             </Text>
             <ChoiceBox fx:id="cmbType" layoutX="21.0" layoutY="269.0" prefHeight="25.0" prefWidth="198.0" />
+            <TextField fx:id="txtBbid" layoutX="334.0" layoutY="70.0" prefHeight="25.0" prefWidth="197.0" promptText="Needer Request" text="Blood Bag Id" />
          </children>
       </Pane>
       <ImageView fitHeight="267.0" fitWidth="332.0" layoutX="304.0" layoutY="177.0" opacity="0.67">
@@ -90,6 +91,5 @@
          </font>
       </Text>
       <DatePicker fx:id="dtpExdate" layoutX="354.0" layoutY="327.0" prefHeight="25.0" prefWidth="197.0" />
-      <ComboBox fx:id="cmbBbID" layoutX="350.0" layoutY="133.0" prefHeight="26.0" prefWidth="197.0" promptText="BloodBag Id" />
    </children>
 </AnchorPane>

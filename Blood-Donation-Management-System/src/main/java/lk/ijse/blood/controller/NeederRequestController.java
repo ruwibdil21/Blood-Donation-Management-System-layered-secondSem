@@ -33,7 +33,7 @@ public class NeederRequestController {
     public ComboBox cmbDonationid;
     public DatePicker dtpExdate;
     public ChoiceBox cmbType;
-    public ComboBox cmbBbID;
+    public TextField txtBbid;
 
     @FXML
     private AnchorPane neederRequest;
@@ -52,9 +52,9 @@ public class NeederRequestController {
     public void initialize(){
         try {
             autoGenerateRequestId();
+            autoGenerateBloodBagId();
             loadAllNeeder();
             loadAllDonation();
-            loadAllBloodBagId();
             dtpDate.setValue(LocalDate.now());
         } catch (SQLException | ClassNotFoundException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -65,7 +65,7 @@ public class NeederRequestController {
     @FXML
     void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String neeReq = txtNeeReq.getText();
-        String blood_bag_id = String.valueOf(cmbBbID.getValue());
+        String blood_bag_id = txtBbid.getText();
         String needer_id = String.valueOf(cmbNeederid.getValue());
         String date = String.valueOf(dtpDate.getValue());
         String donation_id = String.valueOf(cmbDonationid.getValue());
@@ -94,29 +94,13 @@ public class NeederRequestController {
 
     private void clearFields() {
         txtNeeReq.setText("");
-        cmbBbID.getItems().clear();
+        txtBbid.setText("");
         cmbType.getItems().clear();
         cmbNeederid.getItems().clear();
         cmbDonationid.getItems().clear();
         dtpDate.setValue(null);
         txtAmount.setText("");
         dtpExdate.setValue(null);
-    }
-
-    private void loadAllBloodBagId() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
-        try {
-            List<BloodInventoryDto> bbList = bloodInventoryBO.loadAllBloodInventoy();
-
-            for (BloodInventoryDto bloodInventoryDto  : bbList) {
-                obList.add(bloodInventoryDto.getBloodBagId());
-            }
-            cmbBbID.setItems(obList);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }
     }
 
     private void loadAllNeeder() throws ClassNotFoundException {
@@ -158,6 +142,10 @@ public class NeederRequestController {
 
     private void autoGenerateRequestId() throws SQLException, ClassNotFoundException {
        txtNeeReq.setText(neederRequestBO.generateNeedrRequwst());
+    }
+
+    private void autoGenerateBloodBagId() throws SQLException, ClassNotFoundException {
+        txtBbid.setText(bloodInventoryBO.generateBloodBagId());
     }
 }
 

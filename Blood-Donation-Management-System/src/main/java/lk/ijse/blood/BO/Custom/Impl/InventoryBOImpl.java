@@ -11,18 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryBOImpl implements InventoryBO {
-
     InventoryDAO inventoryDAO = (InventoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.INVENTORY);
-
 
     @Override
     public List<InventoryDto> loadAllInventory() throws SQLException, ClassNotFoundException {
-        List<Inventory>inventoryList = inventoryDAO.loadAll();
-        List<InventoryDto>inventoryDtos = new ArrayList<>();
+        List<Inventory> inventoryList = inventoryDAO.loadAll();
+        List<InventoryDto> inventoryDtos = new ArrayList<>();
 
         for (Inventory inventory :inventoryList){
-            inventoryDtos.add(new InventoryDto(inventory.getMedical_id(),inventory.getBloodType(),inventory.getDate()));
-
+            inventoryDtos.add(new InventoryDto(inventory.getMedical_id(),inventory.getDate(),inventory.getBloodType()));
         }
         return inventoryDtos;
     }

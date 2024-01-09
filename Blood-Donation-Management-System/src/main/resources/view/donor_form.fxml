@@ -98,8 +98,8 @@
         <columns>
           <TableColumn fx:id="colDonorid" prefWidth="116.800048828125" text="Name" />
           <TableColumn fx:id="colName" prefWidth="111.99993896484375" text="Name" />
-            <TableColumn fx:id="colDob" prefWidth="130.4000244140625" text="Date Of Birth" />
-            <TableColumn fx:id="colType" prefWidth="147.199951171875" text="Blood Type" />
+            <TableColumn fx:id="colDob" prefWidth="130.4000244140625" text="Blood Type" />
+            <TableColumn fx:id="colType" prefWidth="147.199951171875" text="Date Of Birth" />
         </columns>
       </TableView>
       <Label layoutX="366.0" layoutY="-10.0" prefHeight="62.0" prefWidth="251.0" text="Donors Manage" textAlignment="CENTER" textFill="#e40404" underline="true">

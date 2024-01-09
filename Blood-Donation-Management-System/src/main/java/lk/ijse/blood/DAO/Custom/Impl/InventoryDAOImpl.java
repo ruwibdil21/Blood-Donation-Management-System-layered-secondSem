@@ -55,6 +55,14 @@ public class InventoryDAOImpl implements InventoryDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT med_id FROM medical_inventory ORDER BY med_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("med_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newMedId = Integer.parseInt(numericPart) + 1;
+            return String.format("M%03d", newMedId);
+        } else {
+            return "M001";
+        }
     }
 }
