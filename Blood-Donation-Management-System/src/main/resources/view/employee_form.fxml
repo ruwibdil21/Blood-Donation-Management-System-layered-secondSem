@@ -56,7 +56,7 @@
       <TextField fx:id="txtName" layoutX="40.0" layoutY="194.94921875" promptText="Name" />
       <TextField fx:id="txtAddress" layoutX="42.0" layoutY="255.0" promptText="Address" />
       <TextField fx:id="txtRole" layoutX="43.0" layoutY="318.0" promptText="Role" />
-      <Button layoutX="107.0" layoutY="511.0" mnemonicParsing="false" onAction="#btnSaveOnAction" prefHeight="31.0" prefWidth="144.0" style="-fx-background-color: B50404;" text="Save" textFill="#fff8f8">
+      <Button layoutX="87.0" layoutY="449.0" mnemonicParsing="false" onAction="#btnSaveOnAction" prefHeight="31.0" prefWidth="144.0" style="-fx-background-color: B50404;" text="Save" textFill="#fff8f8">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

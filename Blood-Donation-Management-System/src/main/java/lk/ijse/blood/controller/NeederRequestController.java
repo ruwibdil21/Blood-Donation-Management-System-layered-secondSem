@@ -5,7 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.blood.bo.Custom.BloodInventoryBO;
 import lk.ijse.blood.bo.Custom.DonationBO;
+import lk.ijse.blood.bo.Custom.Impl.BloodInventoryBOImpl;
 import lk.ijse.blood.bo.Custom.Impl.DonationBOImpl;
 import lk.ijse.blood.bo.Custom.Impl.NeederBOImpl;
 import lk.ijse.blood.bo.Custom.Impl.NeederRequestBOImpl;
@@ -30,8 +32,8 @@ public class NeederRequestController {
     public ComboBox cmbNeederid;
     public ComboBox cmbDonationid;
     public DatePicker dtpExdate;
-    public TextField txtType;
-    public TextField txtBloodBagid;
+    public ChoiceBox cmbType;
+    public ComboBox cmbBbID;
 
     @FXML
     private AnchorPane neederRequest;
@@ -45,26 +47,30 @@ public class NeederRequestController {
     NeederRequestBO neederRequestBO= new NeederRequestBOImpl();
     NeederBO neederBO = new NeederBOImpl();
     DonationBO donationBO = new DonationBOImpl();
+    BloodInventoryBO bloodInventoryBO = new BloodInventoryBOImpl();
 
     public void initialize(){
         try {
             autoGenerateRequestId();
             loadAllNeeder();
             loadAllDonation();
+            loadAllBloodBagId();
             dtpDate.setValue(LocalDate.now());
         } catch (SQLException | ClassNotFoundException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+        cmbType.getItems().addAll("A+","A-","B+","B-","AB+","AB-","O+","O-");
+        cmbType.setValue("O+");
     }
     @FXML
     void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String neeReq = txtNeeReq.getText();
-        String blood_bag_id = txtBloodBagid.getText();
+        String blood_bag_id = String.valueOf(cmbBbID.getValue());
         String needer_id = String.valueOf(cmbNeederid.getValue());
         String date = String.valueOf(dtpDate.getValue());
         String donation_id = String.valueOf(cmbDonationid.getValue());
         String amount = txtAmount.getText();
-        String type = txtType.getText();
+        String type = String.valueOf(cmbType.getValue());
         String exdate = String.valueOf(dtpExdate.getValue());
 
         boolean isNeederRequestValidated  = validateNeederRequest();
@@ -88,12 +94,29 @@ public class NeederRequestController {
 
     private void clearFields() {
         txtNeeReq.setText("");
-        txtBloodBagid.setText("");
+        cmbBbID.getItems().clear();
+        cmbType.getItems().clear();
         cmbNeederid.getItems().clear();
         cmbDonationid.getItems().clear();
         dtpDate.setValue(null);
         txtAmount.setText("");
         dtpExdate.setValue(null);
+    }
+
+    private void loadAllBloodBagId() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
+        try {
+            List<BloodInventoryDto> bbList = bloodInventoryBO.loadAllBloodInventoy();
+
+            for (BloodInventoryDto bloodInventoryDto  : bbList) {
+                obList.add(bloodInventoryDto.getBloodBagId());
+            }
+            cmbBbID.setItems(obList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
 
     private void loadAllNeeder() throws ClassNotFoundException {
