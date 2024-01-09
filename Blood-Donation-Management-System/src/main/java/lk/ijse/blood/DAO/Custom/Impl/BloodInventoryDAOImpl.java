@@ -67,6 +67,14 @@ public class BloodInventoryDAOImpl implements BloodInventoryDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT BloodBag_id FROM blood_inventory ORDER BY BloodBag_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("BloodBag_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newInventoryId = Integer.parseInt(numericPart) + 1;
+            return String.format("B%03d", newInventoryId);
+        } else {
+            return "B001";
+        }
     }
 }

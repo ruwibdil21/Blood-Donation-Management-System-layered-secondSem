@@ -46,12 +46,15 @@ public class NeederRequestController {
     NeederBO neederBO = new NeederBOImpl();
     DonationBO donationBO = new DonationBOImpl();
 
-    public void initialize() throws SQLException, ClassNotFoundException {
-        autoGenerateRequestId();
-        //autoGenerateBloodBagId();
-        loadAllNeeder();
-        loadAllDonation();
-        dtpDate.setValue(LocalDate.now());
+    public void initialize(){
+        try {
+            autoGenerateRequestId();
+            loadAllNeeder();
+            loadAllDonation();
+            dtpDate.setValue(LocalDate.now());
+        } catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
     @FXML
     void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
@@ -130,50 +133,8 @@ public class NeederRequestController {
         return true;
     }
 
-    private void autoGenerateRequestId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        ResultSet resultSet = connection.prepareStatement("SELECT Request_id FROM needer_request ORDER BY Request_id DESC LIMIT 1").executeQuery();
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("R");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtNeeReq.setText("R00" + id);
-            } else if (id < 100) {
-                txtNeeReq.setText("R0" + id);
-            } else {
-                txtNeeReq.setText("R" + id);
-            }
-        } else {
-            txtNeeReq.setText("R001");
-        }
-    }
-
-    private void autoGenerateBloodBagId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        ResultSet resultSet = connection.prepareStatement("SELECT BloodBag_id FROM blood_inventory ORDER BY BloodbBag_id DESC LIMIT 1").executeQuery();
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("B");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtBloodBagid.setText("B00" + id);
-            } else if (id < 100) {
-                txtBloodBagid.setText("B0" + id);
-            } else {
-                txtBloodBagid.setText("B" + id);
-            }
-        } else {
-            txtBloodBagid.setText("B001");
-        }
+    private void autoGenerateRequestId() throws SQLException, ClassNotFoundException {
+       txtNeeReq.setText(neederRequestBO.generateNeedrRequwst());
     }
 }
 
