@@ -19,7 +19,10 @@ public class InventoryBOImpl implements InventoryBO {
         List<InventoryDto> inventoryDtos = new ArrayList<>();
 
         for (Inventory inventory :inventoryList){
-            inventoryDtos.add(new InventoryDto(inventory.getMedical_id(),inventory.getDate(),inventory.getBloodType()));
+            inventoryDtos.add(new InventoryDto(
+                    inventory.getMedical_id(),
+                    inventory.getDate(),
+                    inventory.getBloodType()));
         }
         return inventoryDtos;
     }
@@ -32,18 +35,29 @@ public class InventoryBOImpl implements InventoryBO {
     @Override
     public InventoryDto searchInventory(String id) throws SQLException, ClassNotFoundException {
         Inventory inventory = inventoryDAO.search(id);
-        InventoryDto inventoryDto = new InventoryDto(inventory.getMedical_id(),inventory.getBloodType(),inventory.getDate());
-        return  inventoryDto;
+        if (inventory != null) {
+            return new InventoryDto(
+                    inventory.getMedical_id(),
+                    inventory.getBloodType(),
+                    inventory.getDate());
+        }
+        return null;
     }
 
     @Override
     public boolean saveInventory(InventoryDto dto) throws SQLException, ClassNotFoundException {
-        return inventoryDAO.save(new Inventory(dto.getMedical_id(), dto.getBloodType(), dto.getDate()));
+        return inventoryDAO.save(new Inventory(
+                dto.getMedical_id(),
+                dto.getBloodType(),
+                dto.getDate()));
     }
 
     @Override
     public boolean updateInventory(InventoryDto dto) throws SQLException, ClassNotFoundException {
-        return inventoryDAO.update(new Inventory(dto.getMedical_id(), dto.getBloodType(), dto.getDate()));
+        return inventoryDAO.update(new Inventory(
+                dto.getMedical_id(),
+                dto.getBloodType(),
+                dto.getDate()));
     }
 
     @Override

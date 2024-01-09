@@ -18,7 +18,10 @@ public class OrderDetailsBOImpl implements OrderDetailsBO {
         List<OrderDetailsDto> orderDetailsDtos = new ArrayList<>();
 
         for (OrderDetails orderDetails :orderDetailsList){
-            orderDetailsDtos.add(new OrderDetailsDto(orderDetails.getOrder_id(),orderDetails.getMed_id(),orderDetails.getDescription()));
+            orderDetailsDtos.add(new OrderDetailsDto(
+                    orderDetails.getOrder_id(),
+                    orderDetails.getMed_id(),
+                    orderDetails.getDescription()));
         }
         return orderDetailsDtos;
     }
@@ -31,18 +34,29 @@ public class OrderDetailsBOImpl implements OrderDetailsBO {
     @Override
     public OrderDetailsDto searchOrderDetails(String id) throws SQLException, ClassNotFoundException {
         OrderDetails orderDetails = orderDetailsDAO.search(id);
-        OrderDetailsDto orderDetailsDto =new OrderDetailsDto(orderDetails.getOrder_id(),orderDetails.getMed_id(),orderDetails.getDescription());
-        return orderDetailsDto;
+        if (orderDetails != null) {
+            return new OrderDetailsDto(
+                    orderDetails.getOrder_id(),
+                    orderDetails.getMed_id(),
+                    orderDetails.getDescription());
+        }
+        return null;
     }
 
     @Override
     public boolean saveOrderDetails(OrderDetailsDto dto) throws SQLException, ClassNotFoundException {
-        return orderDetailsDAO.save(new OrderDetails(dto.getOrder_id(), dto.getMed_id(), dto.getDescription()));
+        return orderDetailsDAO.save(new OrderDetails(
+                dto.getOrder_id(),
+                dto.getMed_id(),
+                dto.getDescription()));
     }
 
     @Override
     public boolean updateOrderDetails(OrderDetailsDto dto) throws SQLException, ClassNotFoundException {
-        return orderDetailsDAO.update(new OrderDetails(dto.getOrder_id(), dto.getMed_id(), dto.getDescription()));
+        return orderDetailsDAO.update(new OrderDetails(
+                dto.getOrder_id(),
+                dto.getMed_id(),
+                dto.getDescription()));
     }
 
     @Override

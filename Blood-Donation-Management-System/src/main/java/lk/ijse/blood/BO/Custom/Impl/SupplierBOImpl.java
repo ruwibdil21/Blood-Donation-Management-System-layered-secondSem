@@ -37,18 +37,35 @@ public class SupplierBOImpl implements SupplierBO {
     @Override
     public SupplierDto searchSupplier(String id) throws SQLException, ClassNotFoundException {
         Supplier supplier =supplierDAO.search(id);
-        SupplierDto supplierDto = new SupplierDto(supplier.getSup_id(),supplier.getUser_id(),supplier.getName(),supplier.getAddress(),supplier.getTel());
-        return supplierDto;
+        if (supplier != null) {
+            return new SupplierDto(
+                    supplier.getSup_id(),
+                    supplier.getUser_id(),
+                    supplier.getName(),
+                    supplier.getAddress(),
+                    supplier.getTel());
+        }
+        return null;
     }
 
     @Override
     public boolean saveSupplier(SupplierDto dto) throws SQLException, ClassNotFoundException {
-        return supplierDAO.save(new Supplier(dto.getSup_id(), dto.getUser_id(), dto.getName(), dto.getAddress(), dto.getTel()));
+        return supplierDAO.save(new Supplier(
+                dto.getSup_id(),
+                dto.getUser_id(),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getTel()));
     }
 
     @Override
     public boolean updateSupplier(SupplierDto dto) throws SQLException, ClassNotFoundException {
-        return supplierDAO.update(new Supplier(dto.getSup_id(), dto.getUser_id(), dto.getName(), dto.getAddress(), dto.getTel()));
+        return supplierDAO.update(new Supplier(
+                dto.getSup_id(),
+                dto.getUser_id(),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getTel()));
     }
 
     @Override

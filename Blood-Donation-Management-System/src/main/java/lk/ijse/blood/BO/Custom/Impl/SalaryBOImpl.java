@@ -19,7 +19,12 @@ public class SalaryBOImpl implements SalaryBO {
         List<SalaryDto>salaryDtos =new ArrayList<>();
 
         for (Salary salary :salaryList){
-            salaryDtos.add(new SalaryDto(salary.getSalary_id(),salary.getEmployee_id(),salary.getAmount(),salary.getMonth(),salary.getYear()));
+            salaryDtos.add(new SalaryDto(
+                    salary.getSalary_id(),
+                    salary.getEmployee_id(),
+                    salary.getAmount(),
+                    salary.getMonth(),
+                    salary.getYear()));
 
         }
         return salaryDtos;
@@ -33,18 +38,35 @@ public class SalaryBOImpl implements SalaryBO {
     @Override
     public SalaryDto searchSalary(String id) throws SQLException, ClassNotFoundException {
         Salary salary = salaryDAO.search(id);
-        SalaryDto salaryDto = new SalaryDto(salary.getSalary_id(),salary.getEmployee_id(),salary.getAmount(),salary.getMonth(),salary.getYear());
-        return salaryDto;
+        if (salary != null) {
+            return new SalaryDto(
+                    salary.getSalary_id(),
+                    salary.getEmployee_id(),
+                    salary.getAmount(),
+                    salary.getMonth(),
+                    salary.getYear());
+        }
+        return null;
     }
 
     @Override
     public boolean saveSalary(SalaryDto dto) throws SQLException, ClassNotFoundException {
-        return salaryDAO.save(new Salary(dto.getSalary_id(), dto.getEmployee_id(), dto.getAmount(), dto.getMonth(), dto.getYear()));
+        return salaryDAO.save(new Salary(
+                dto.getSalary_id(),
+                dto.getEmployee_id(),
+                dto.getAmount(),
+                dto.getMonth(),
+                dto.getYear()));
     }
 
     @Override
     public boolean updateSalary(SalaryDto dto) throws SQLException, ClassNotFoundException {
-        return salaryDAO.update(new Salary(dto.getSalary_id(), dto.getEmployee_id(), dto.getAmount(), dto.getMonth(), dto.getYear()));
+        return salaryDAO.update(new Salary(
+                dto.getSalary_id(),
+                dto.getEmployee_id(),
+                dto.getAmount(),
+                dto.getMonth(),
+                dto.getYear()));
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeBOImpl implements EmployeeBO {
-
     EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.DONATION);
     @Override
     public List<EmployeeDto> loadAllEmployee() throws SQLException, ClassNotFoundException {
@@ -38,18 +37,38 @@ public class EmployeeBOImpl implements EmployeeBO {
     @Override
     public EmployeeDto searchEmployee(String id) throws SQLException, ClassNotFoundException {
         Employee employee = employeeDAO.search(id);
-        EmployeeDto employeeDto = new EmployeeDto(employee.getEmp_id(),employee.getUser_id(),employee.getName(),employee.getAddress(),employee.getRole(),employee.getDOB());
-        return employeeDto;
+        if (employee != null) {
+            return new EmployeeDto(
+                    employee.getEmp_id(),
+                    employee.getUser_id(),
+                    employee.getName(),
+                    employee.getAddress(),
+                    employee.getRole(),
+                    employee.getDOB());
+        }
+        return null;
     }
 
     @Override
     public boolean saveEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException {
-        return employeeDAO.save(new Employee(dto.getEmp_id(), dto.getUser_id(), dto.getName(), dto.getAddress(), dto.getRole(), dto.getDOB()));
+        return employeeDAO.save(new Employee(
+                dto.getEmp_id(),
+                dto.getUser_id(),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getRole(),
+                dto.getDOB()));
     }
 
     @Override
     public boolean updateEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException {
-        return employeeDAO.update(new Employee(dto.getEmp_id(), dto.getUser_id(), dto.getName(), dto.getAddress(), dto.getRole(), dto.getDOB()));
+        return employeeDAO.update(new Employee(
+                dto.getEmp_id(),
+                dto.getUser_id(),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getRole(),
+                dto.getDOB()));
 
     }
 

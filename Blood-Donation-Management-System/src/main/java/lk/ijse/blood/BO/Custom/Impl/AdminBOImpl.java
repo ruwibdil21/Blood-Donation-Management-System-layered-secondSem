@@ -34,18 +34,29 @@ public class AdminBOImpl implements AdminBO {
     @Override
     public UserDto searchAdmin(String id) throws SQLException, ClassNotFoundException {
         User user = adminDAO.search(id);
-        UserDto userDto = new UserDto(user.getUser_id(),user.getName(),user.getPassword());
-        return userDto;
+        if (user != null) {
+            return new UserDto(
+                    user.getUser_id(),
+                    user.getName(),
+                    user.getPassword());
+        }
+        return null;
     }
 
     @Override
     public boolean saveAdmin(UserDto dto) throws SQLException, ClassNotFoundException {
-        return adminDAO.save(new User(dto.getUser_id(), dto.getName(), dto.getPassword()));
+        return adminDAO.save(new User(
+                dto.getUser_id(),
+                dto.getName(),
+                dto.getPassword()));
     }
 
     @Override
     public boolean updateAdmin(UserDto dto) throws SQLException, ClassNotFoundException {
-        return adminDAO.update(new User(dto.getUser_id(), dto.getName(), dto.getPassword()));
+        return adminDAO.update(new User(
+                dto.getUser_id(),
+                dto.getName(),
+                dto.getPassword()));
     }
 
     @Override

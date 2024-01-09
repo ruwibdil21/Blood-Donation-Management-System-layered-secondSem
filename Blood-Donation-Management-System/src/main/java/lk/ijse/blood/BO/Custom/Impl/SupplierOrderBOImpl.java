@@ -18,7 +18,11 @@ public class SupplierOrderBOImpl implements SupplierOrderBO {
         List<SupplierOrdersDto> supplierOrdersDtos =new ArrayList<>();
 
         for (SupplierOrders supplierOrders : supplierOrdersList){
-            supplierOrdersDtos.add(new SupplierOrdersDto(supplierOrders.getSupOrder_id(),supplierOrders.getSupplier_id(),supplierOrders.getDate(),supplierOrders.getAmount()));
+            supplierOrdersDtos.add(new SupplierOrdersDto
+                    (supplierOrders.getSupOrder_id(),
+                            supplierOrders.getSupplier_id(),
+                            supplierOrders.getDate(),
+                            supplierOrders.getAmount()));
 
         }
         return supplierOrdersDtos;
@@ -32,8 +36,14 @@ public class SupplierOrderBOImpl implements SupplierOrderBO {
     @Override
     public SupplierOrdersDto searchSupplierOrders(String id) throws SQLException, ClassNotFoundException {
        SupplierOrders supplierOrders =supplierOrderDAO.search(id);
-       SupplierOrdersDto supplierOrdersDto = new SupplierOrdersDto(supplierOrders.getSupOrder_id(),supplierOrders.getSupplier_id(),supplierOrders.getDate(),supplierOrders.getAmount());
-       return supplierOrdersDto;
+       if (supplierOrders != null) {
+           return new SupplierOrdersDto(
+                   supplierOrders.getSupOrder_id(),
+                   supplierOrders.getSupplier_id(),
+                   supplierOrders.getDate(),
+                   supplierOrders.getAmount());
+       }
+       return null;
     }
 
     @Override
@@ -47,7 +57,11 @@ public class SupplierOrderBOImpl implements SupplierOrderBO {
 
     @Override
     public boolean updateSupplierOrders(SupplierOrdersDto dto) throws SQLException, ClassNotFoundException {
-        return supplierOrderDAO.update(new SupplierOrders(dto.getSupOrder_id(), dto.getSupplier_id(), dto.getDate(), dto.getAmount()));
+        return supplierOrderDAO.update(new SupplierOrders(
+                dto.getSupOrder_id(),
+                dto.getSupplier_id(),
+                dto.getDate(),
+                dto.getAmount()));
     }
 
     @Override

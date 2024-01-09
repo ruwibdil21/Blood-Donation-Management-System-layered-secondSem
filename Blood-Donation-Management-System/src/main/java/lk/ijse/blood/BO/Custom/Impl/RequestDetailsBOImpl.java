@@ -19,7 +19,10 @@ public class RequestDetailsBOImpl implements RequestDetailsBO {
         List<RequestDetailsDto>requestDetailsDtos = new ArrayList<>();
 
         for (RequestDetails requestDetails : requestDetailsList){
-            requestDetailsDtos.add(new RequestDetailsDto(requestDetails.getNeeReq_id(),requestDetails.getBloodBagId(),requestDetails.getDescription()));
+            requestDetailsDtos.add(new RequestDetailsDto(
+                    requestDetails.getNeeReq_id(),
+                    requestDetails.getBloodBagId(),
+                    requestDetails.getDescription()));
         }
         return requestDetailsDtos;
     }
@@ -32,18 +35,29 @@ public class RequestDetailsBOImpl implements RequestDetailsBO {
     @Override
     public RequestDetailsDto searchRequestDetails(String id) throws SQLException, ClassNotFoundException {
         RequestDetails requestDetails =requestDetailsDAO.search(id);
-        RequestDetailsDto requestDetailsDto = new RequestDetailsDto(requestDetails.getNeeReq_id(),requestDetails.getBloodBagId(),requestDetails.getDescription());
-        return requestDetailsDto;
+        if (requestDetails != null) {
+            return new RequestDetailsDto(
+                    requestDetails.getNeeReq_id(),
+                    requestDetails.getBloodBagId(),
+                    requestDetails.getDescription());
+        }
+        return null;
     }
 
     @Override
     public boolean saveRequestDetails(RequestDetailsDto dto) throws SQLException, ClassNotFoundException {
-        return requestDetailsDAO.save(new RequestDetails(dto.getNeeReq_id(), dto.getBloodBagId(), dto.getDescription()));
+        return requestDetailsDAO.save(new RequestDetails(
+                dto.getNeeReq_id(),
+                dto.getBloodBagId(),
+                dto.getDescription()));
     }
 
     @Override
     public boolean updateRequestDetails(RequestDetailsDto dto) throws SQLException, ClassNotFoundException {
-        return requestDetailsDAO.update(new RequestDetails(dto.getNeeReq_id(), dto.getBloodBagId(), dto.getDescription()));
+        return requestDetailsDAO.update(new RequestDetails(
+                dto.getNeeReq_id(),
+                dto.getBloodBagId(),
+                dto.getDescription()));
     }
 
     @Override

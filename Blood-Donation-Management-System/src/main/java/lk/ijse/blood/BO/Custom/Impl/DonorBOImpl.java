@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DonorBOImpl implements DonorBO {
-
     DonorDAO donorDAO = (DonorDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.DONOR);
     @Override
     public List<DonorDto> loadAllDonor() throws SQLException, ClassNotFoundException {
@@ -19,7 +18,14 @@ public class DonorBOImpl implements DonorBO {
         List<DonorDto> donorDtos =new ArrayList<>();
 
         for (Donor donor:donorList){
-            donorDtos.add(new DonorDto(donor.getD_id(), donor.getFirstName(), donor.getLastName(),donor.getType(),donor.getDob(),donor.getTel(),donor.getLastDate()));
+            donorDtos.add(new DonorDto(
+                    donor.getD_id(),
+                    donor.getFirstName(),
+                    donor.getLastName(),
+                    donor.getType(),
+                    donor.getDob(),
+                    donor.getTel(),
+                    donor.getLastDate()));
         }
         return donorDtos;
     }
@@ -32,24 +38,41 @@ public class DonorBOImpl implements DonorBO {
     @Override
     public DonorDto searchDonor(String id) throws SQLException, ClassNotFoundException {
         Donor donor =donorDAO.search(id);
-        return new DonorDto(
-                donor.getD_id(),
-                donor.getFirstName(),
-                donor.getLastName(),
-                donor.getType(),
-                donor.getDob(),
-                donor.getTel(),
-                donor.getLastDate());
+        if (donor != null) {
+            return new DonorDto(
+                    donor.getD_id(),
+                    donor.getFirstName(),
+                    donor.getLastName(),
+                    donor.getType(),
+                    donor.getDob(),
+                    donor.getTel(),
+                    donor.getLastDate());
+        }
+        return null;
     }
 
     @Override
     public boolean saveDonor(DonorDto dto) throws SQLException, ClassNotFoundException {
-        return donorDAO.save(new Donor(dto.getD_id(), dto.getFirstName(), dto.getLastName(), dto.getType(), dto.getDob(), dto.getTel(), dto.getLastDate()));
+        return donorDAO.save(new Donor(
+                dto.getD_id(),
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getType(),
+                dto.getDob(),
+                dto.getTel(),
+                dto.getLastDate()));
     }
 
     @Override
     public boolean updateDonor(DonorDto dto) throws SQLException, ClassNotFoundException {
-        return donorDAO.update(new Donor(dto.getD_id(), dto.getFirstName(), dto.getLastName(), dto.getType(), dto.getDob(), dto.getTel(), dto.getLastDate()));
+        return donorDAO.update(new Donor(
+                dto.getD_id(),
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getType(),
+                dto.getDob(),
+                dto.getTel(),
+                dto.getLastDate()));
     }
 
     @Override

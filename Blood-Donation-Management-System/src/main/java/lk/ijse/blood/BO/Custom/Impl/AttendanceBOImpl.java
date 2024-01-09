@@ -18,7 +18,11 @@ public class AttendanceBOImpl implements AttendanceBO {
         List<AttendanceDto> attendanceDtos = new ArrayList<>();
 
         for (Attendance attendance : attendanceList){
-            attendanceDtos.add(new AttendanceDto(attendance.getAtt_id(),attendance.getEmp_id(),attendance.getDate(),attendance.getStatus()));
+            attendanceDtos.add(new AttendanceDto(
+                    attendance.getAtt_id(),
+                    attendance.getEmp_id(),
+                    attendance.getDate(),
+                    attendance.getStatus()));
         }
         return attendanceDtos;
     }
@@ -31,19 +35,31 @@ public class AttendanceBOImpl implements AttendanceBO {
     @Override
     public AttendanceDto searchAttendance(String id) throws SQLException, ClassNotFoundException {
         Attendance attendance = attendanceDAO.search(id);
-        AttendanceDto attendanceDto = new AttendanceDto(attendance.getAtt_id(), attendance.getEmp_id(), attendance.getDate(), attendance.getStatus());
-        return attendanceDto;
+        if (attendance != null) {
+            return new AttendanceDto(attendance.getAtt_id(),
+                    attendance.getEmp_id(),
+                    attendance.getDate(),
+                    attendance.getStatus());
+        }
+        return null;
     }
 
     @Override
     public boolean saveAttendance(AttendanceDto dto) throws SQLException, ClassNotFoundException {
-        return attendanceDAO.save(new Attendance(dto.getAtt_id(), dto.getEmp_id(), dto.getDate(), dto.getStatus()));
+        return attendanceDAO.save(new Attendance(
+                dto.getAtt_id(),
+                dto.getEmp_id(),
+                dto.getDate(),
+                dto.getStatus()));
     }
 
     @Override
     public boolean updateAttendance(AttendanceDto dto) throws SQLException, ClassNotFoundException {
-        return attendanceDAO.update(new Attendance(dto.getAtt_id(), dto.getEmp_id(), dto.getDate(), dto.getStatus()));
-
+        return attendanceDAO.update(new Attendance(
+                dto.getAtt_id(),
+                dto.getEmp_id(),
+                dto.getDate(),
+                dto.getStatus()));
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NeederBOImpl implements NeederBO {
-
     NeederDAO neederDAO = (NeederDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.NEEDER);
     @Override
     public List<NeederDto> loadAllNeeder() throws SQLException, ClassNotFoundException {
@@ -19,8 +18,13 @@ public class NeederBOImpl implements NeederBO {
         List<NeederDto>neederDtos = new ArrayList<>();
 
         for (Needer needer : neederList){
-            neederDtos.add(new NeederDto(needer.getNeederId(),needer.getUserId(),needer.getName(),needer.getAddress(),needer.getContact(),needer.getEmail()));
-
+            neederDtos.add(new NeederDto(
+                    needer.getNeederId(),
+                    needer.getUserId(),
+                    needer.getName(),
+                    needer.getAddress(),
+                    needer.getContact(),
+                    needer.getEmail()));
         }
         return neederDtos;
     }
@@ -33,24 +37,42 @@ public class NeederBOImpl implements NeederBO {
     @Override
     public NeederDto searchNeeder(String id) throws SQLException, ClassNotFoundException {
         Needer needer = neederDAO.search(id);
-        NeederDto neederDto = new NeederDto(needer.getNeederId(),needer.getUserId(),needer.getName(),needer.getAddress(),needer.getContact(),needer.getEmail());
-        return neederDto;
+        if (needer != null) {
+            return new NeederDto(
+                    needer.getNeederId(),
+                    needer.getUserId(),
+                    needer.getName(),
+                    needer.getAddress(),
+                    needer.getContact(),
+                    needer.getEmail());
+        }
+        return null;
     }
 
     @Override
     public boolean saveNeeder(NeederDto dto) throws SQLException, ClassNotFoundException {
-        return neederDAO.save(new Needer(dto.getNeederId(), dto.getUserId(), dto.getName(), dto.getAddress(), dto.getContact(), dto.getEmail()));
+        return neederDAO.save(new Needer(
+                dto.getNeederId(),
+                dto.getUserId(),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getContact(),
+                dto.getEmail()));
     }
 
     @Override
     public boolean updateNeeder(NeederDto dto) throws SQLException, ClassNotFoundException {
-        return neederDAO.update(new Needer(dto.getNeederId(), dto.getUserId(), dto.getName(), dto.getAddress(), dto.getContact(), dto.getEmail()));
+        return neederDAO.update(new Needer(
+                dto.getNeederId(),
+                dto.getUserId(),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getContact(),
+                dto.getEmail()));
     }
 
     @Override
     public String generateNeeder() throws SQLException, ClassNotFoundException {
         return neederDAO.generateId();
     }
-
-
 }

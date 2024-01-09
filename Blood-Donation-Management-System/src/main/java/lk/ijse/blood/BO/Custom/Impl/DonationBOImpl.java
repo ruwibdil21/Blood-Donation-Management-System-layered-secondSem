@@ -36,18 +36,35 @@ public class DonationBOImpl implements DonationBO {
     @Override
     public DonationDto searchDonation(String id) throws SQLException, ClassNotFoundException {
         Donation donation = donationDAO.search(id);
-        DonationDto donationDto = new DonationDto(donation.getDo_id(),donation.getD_id(),donation.getDate(),donation.getBlood_type(),donation.getHemoglobin_level());
-        return donationDto;
+        if (donation != null) {
+            return new DonationDto(
+                    donation.getDo_id(),
+                    donation.getD_id(),
+                    donation.getDate(),
+                    donation.getBlood_type(),
+                    donation.getHemoglobin_level());
+        }
+        return null;
     }
 
     @Override
     public boolean saveDonation(DonationDto dto) throws SQLException, ClassNotFoundException {
-        return  donationDAO.save(new Donation(dto.getDo_id(), dto.getD_id(), dto.getDate(), dto.getBlood_type(), dto.getHemoglobin_level()));
+        return  donationDAO.save(new Donation(
+                dto.getDo_id(),
+                dto.getD_id(),
+                dto.getDate(),
+                dto.getBlood_type(),
+                dto.getHemoglobin_level()));
     }
 
     @Override
     public boolean updateDonation(DonationDto dto) throws SQLException, ClassNotFoundException {
-        return donationDAO.update(new Donation(dto.getDo_id(),dto.getD_id(),dto.getDate(),dto.getBlood_type(),dto.getHemoglobin_level()));
+        return donationDAO.update(new Donation(
+                dto.getDo_id(),
+                dto.getD_id(),
+                dto.getDate(),
+                dto.getBlood_type(),
+                dto.getHemoglobin_level()));
     }
 
     @Override

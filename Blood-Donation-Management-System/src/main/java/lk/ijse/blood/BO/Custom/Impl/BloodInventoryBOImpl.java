@@ -18,7 +18,12 @@ public class BloodInventoryBOImpl implements BloodInventoryBO {
         List<BloodInventoryDto> bloodInventoryDtos = new ArrayList<>();
 
         for (BloodInventory bloodInventory : bloodInventoryList) {
-            bloodInventoryDtos.add(new BloodInventoryDto(bloodInventory.getBloodBagId(), bloodInventory.getDonation_id(), bloodInventory.getDonation_date(), bloodInventory.getEx_date(), bloodInventory.getBlood_type()));
+            bloodInventoryDtos.add(new BloodInventoryDto(
+                    bloodInventory.getBloodBagId(),
+                    bloodInventory.getDonation_id(),
+                    bloodInventory.getDonation_date(),
+                    bloodInventory.getEx_date(),
+                    bloodInventory.getBlood_type()));
         }
         return bloodInventoryDtos;
     }
@@ -31,19 +36,35 @@ public class BloodInventoryBOImpl implements BloodInventoryBO {
     @Override
     public BloodInventoryDto searchBloodInventory(String id) throws SQLException, ClassNotFoundException {
         BloodInventory bloodInventory = bloodInventoryDAO.search(id);
-        BloodInventoryDto bloodInventoryDto = new BloodInventoryDto(bloodInventory.getBloodBagId(),bloodInventory.getDonation_id(),bloodInventory.getDonation_date(),bloodInventory.getEx_date(),bloodInventory.getBlood_type());
-        return bloodInventoryDto;
+        if (bloodInventory != null) {
+            return new BloodInventoryDto(
+                    bloodInventory.getBloodBagId(),
+                    bloodInventory.getDonation_id(),
+                    bloodInventory.getDonation_date(),
+                    bloodInventory.getEx_date(),
+                    bloodInventory.getBlood_type());
+        }
+        return null;
     }
 
     @Override
     public boolean saveBloodInventory(BloodInventoryDto dto) throws SQLException, ClassNotFoundException {
-        return bloodInventoryDAO.save(new BloodInventory(dto.getBloodBagId(), dto.getDonation_id(), dto.getDonation_date(), dto.getEx_date(), dto.getBlood_type()));
+        return bloodInventoryDAO.save(new BloodInventory(
+                dto.getBloodBagId(),
+                dto.getDonation_id(),
+                dto.getDonation_date(),
+                dto.getEx_date(),
+                dto.getBlood_type()));
     }
 
     @Override
     public boolean updateBloodInventoy(BloodInventoryDto dto) throws SQLException, ClassNotFoundException {
-        return bloodInventoryDAO.update(new BloodInventory(dto.getBloodBagId(), dto.getDonation_id(), dto.getDonation_date(), dto.getEx_date(), dto.getBlood_type()));
-
+        return bloodInventoryDAO.update(new BloodInventory(
+                dto.getBloodBagId(),
+                dto.getDonation_id(),
+                dto.getDonation_date(),
+                dto.getEx_date(),
+                dto.getBlood_type()));
     }
 
     @Override

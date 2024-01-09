@@ -21,8 +21,11 @@ public class NeederRequestBOImpl implements NeederRequestBO {
         List<NeederRequestDto>neederRequestDtos = new ArrayList<>();
 
         for (NeederRequest neederRequest:neederRequestList){
-            neederRequestDtos.add(new NeederRequestDto(neederRequest.getNeeReq_id(),neederRequest.getNeederId(),neederRequest.getDate(),neederRequest.getAmount()));
-
+            neederRequestDtos.add(new NeederRequestDto(
+                    neederRequest.getNeeReq_id(),
+                    neederRequest.getNeederId(),
+                    neederRequest.getDate(),
+                    neederRequest.getAmount()));
         }
         return neederRequestDtos;
     }
@@ -35,18 +38,32 @@ public class NeederRequestBOImpl implements NeederRequestBO {
     @Override
     public NeederRequestDto searchNeederRequest(String id) throws SQLException, ClassNotFoundException {
         NeederRequest neederRequest =neederRequestDAO.search(id);
-        NeederRequestDto neederRequestDto = new NeederRequestDto(neederRequest.getNeeReq_id(),neederRequest.getNeederId(),neederRequest.getDate(),neederRequest.getAmount());
-        return  neederRequestDto;
+        if (neederRequest != null) {
+            return new NeederRequestDto(
+                    neederRequest.getNeeReq_id(),
+                    neederRequest.getNeederId(),
+                    neederRequest.getDate(),
+                    neederRequest.getAmount());
+        }
+        return null;
     }
 
     @Override
     public boolean saveNeederRequest(NeederRequestDto dto) throws SQLException, ClassNotFoundException {
-        return neederRequestDAO.save(new NeederRequest(dto.getNeeReq_id(), dto.getNeederId(), dto.getDate(), dto.getAmount()));
+        return neederRequestDAO.save(new NeederRequest(
+                dto.getNeeReq_id(),
+                dto.getNeederId(),
+                dto.getDate(),
+                dto.getAmount()));
     }
 
     @Override
     public boolean updateNeederRequwst(NeederRequestDto dto) throws SQLException, ClassNotFoundException {
-        return neederRequestDAO.update(new NeederRequest(dto.getNeeReq_id(), dto.getNeederId(), dto.getDate(), dto.getAmount()));
+        return neederRequestDAO.update(new NeederRequest(
+                dto.getNeeReq_id(),
+                dto.getNeederId(),
+                dto.getDate(),
+                dto.getAmount()));
     }
 
     @Override
