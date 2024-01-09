@@ -1,8 +1,7 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.AdminDAO;
+import lk.ijse.blood.dao.Custom.AdminDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.entity.User;
 
 import java.sql.ResultSet;
@@ -21,7 +20,7 @@ public class AdminDAOImpl implements AdminDAO {
                     resultSet.getString(1),
                     resultSet.getString(2),
                     resultSet.getString(3));
-        userList.add(userDto);
+            userList.add(userDto);
         }
         return userList;
     }

@@ -1,9 +1,7 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.RequestDetailsDAO;
+import lk.ijse.blood.dao.Custom.RequestDetailsDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.DonorDto;
-import lk.ijse.blood.dto.RequestDetailsDto;
 import lk.ijse.blood.entity.RequestDetails;
 
 import java.sql.ResultSet;
@@ -15,9 +13,9 @@ public class RequestDetailsDAOImpl implements RequestDetailsDAO {
 
     @Override
     public List<RequestDetails> loadAll() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtil.execute("SELECT * FROM requestDetails");
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM request_Details");
+        List<RequestDetails> requestDetailsList = new ArrayList<>();
 
-        List<RequestDetails> requestDetailsList = null;
         while (resultSet.next()) {
            RequestDetails requestDetailsDto = new RequestDetails(
                     resultSet.getString(1),
@@ -25,7 +23,6 @@ public class RequestDetailsDAOImpl implements RequestDetailsDAO {
                     resultSet.getString(3));
            requestDetailsList.add(requestDetailsDto);
         }
-
         return requestDetailsList;    }
 
     @Override
@@ -64,6 +61,14 @@ public class RequestDetailsDAOImpl implements RequestDetailsDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT NeeReq_id FROM request_details ORDER BY NeeReq_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("NeeReq_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newNeederId = Integer.parseInt(numericPart) + 1;
+            return String.format("N%03d", newNeederId);
+        } else {
+            return "N001";
+        }
     }
 }

@@ -1,4 +1,4 @@
-package lk.ijse.blood.BO;
+package lk.ijse.blood.bo;
 
 public interface SuperBO {
 }

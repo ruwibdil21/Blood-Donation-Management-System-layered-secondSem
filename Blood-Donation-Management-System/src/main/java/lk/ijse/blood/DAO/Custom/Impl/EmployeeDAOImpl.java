@@ -1,8 +1,7 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.EmployeeDAO;
+import lk.ijse.blood.dao.Custom.EmployeeDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.EmployeeDto;
 import lk.ijse.blood.entity.Employee;
 
 import java.sql.ResultSet;
@@ -14,7 +13,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     public List<Employee> loadAll() throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM employee ");
-
         List<Employee> employeeList= new ArrayList<>();
 
         while (resultSet.next()) {
@@ -24,10 +22,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                     resultSet.getString(3),
                     resultSet.getString(4),
                     resultSet.getString(5),
-                    resultSet.getDate(6));
+                    resultSet.getString(6));
             employeeList.add(employeeDto);
         }
-
         return employeeList;
     }
 
@@ -59,6 +56,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT Emp_id FROM Employee ORDER BY Emp_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("Emp_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newEmpId = Integer.parseInt(numericPart) + 1;
+            return String.format("E%03d", newEmpId);
+        } else {
+            return "E001";
+        }
     }
 }

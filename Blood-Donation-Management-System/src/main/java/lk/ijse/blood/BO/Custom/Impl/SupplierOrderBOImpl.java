@@ -1,8 +1,8 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.SupplierOrderBO;
-import lk.ijse.blood.DAO.Custom.SupplierOrderDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.SupplierOrderBO;
+import lk.ijse.blood.dao.Custom.SupplierOrderDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.SupplierOrdersDto;
 import lk.ijse.blood.entity.SupplierOrders;
 
@@ -38,7 +38,11 @@ public class SupplierOrderBOImpl implements SupplierOrderBO {
 
     @Override
     public boolean saveSupplierOrders(SupplierOrdersDto dto) throws SQLException, ClassNotFoundException {
-        return supplierOrderDAO.save(new SupplierOrders(dto.getSupOrder_id(), dto.getSupplier_id(), dto.getDate(), dto.getAmount()));
+        return supplierOrderDAO.save(new SupplierOrders(
+                dto.getSupOrder_id(),
+                dto.getSupplier_id(),
+                dto.getDate(),
+                dto.getAmount()));
     }
 
     @Override

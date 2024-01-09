@@ -4,14 +4,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.blood.BO.Custom.DonationBO;
-import lk.ijse.blood.BO.Custom.Impl.DonationBOImpl;
-import lk.ijse.blood.BO.Custom.Impl.NeederBOImpl;
-import lk.ijse.blood.BO.Custom.Impl.NeederRequestBOImpl;
-import lk.ijse.blood.BO.Custom.NeederBO;
-import lk.ijse.blood.BO.Custom.NeederRequestBO;
+import lk.ijse.blood.bo.Custom.BloodInventoryBO;
+import lk.ijse.blood.bo.Custom.DonationBO;
+import lk.ijse.blood.bo.Custom.Impl.BloodInventoryBOImpl;
+import lk.ijse.blood.bo.Custom.Impl.DonationBOImpl;
+import lk.ijse.blood.bo.Custom.Impl.NeederBOImpl;
+import lk.ijse.blood.bo.Custom.Impl.NeederRequestBOImpl;
+import lk.ijse.blood.bo.Custom.NeederBO;
+import lk.ijse.blood.bo.Custom.NeederRequestBO;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.*;
 import lk.ijse.blood.entity.BloodInventory;
@@ -31,8 +32,8 @@ public class NeederRequestController {
     public ComboBox cmbNeederid;
     public ComboBox cmbDonationid;
     public DatePicker dtpExdate;
-    public TextField txtType;
-    public TextField txtBloodBagid;
+    public ChoiceBox cmbType;
+    public TextField txtBbid;
 
     @FXML
     private AnchorPane neederRequest;
@@ -46,23 +47,30 @@ public class NeederRequestController {
     NeederRequestBO neederRequestBO= new NeederRequestBOImpl();
     NeederBO neederBO = new NeederBOImpl();
     DonationBO donationBO = new DonationBOImpl();
+    BloodInventoryBO bloodInventoryBO = new BloodInventoryBOImpl();
 
-    public void initialize() throws SQLException, ClassNotFoundException {
-        autoGenerateRequestId();
-        //autoGenerateBloodBagId();
-        loadAllNeeder();
-        loadAllDonation();
-        dtpDate.setValue(LocalDate.now());
+    public void initialize(){
+        try {
+            autoGenerateRequestId();
+            autoGenerateBloodBagId();
+            loadAllNeeder();
+            loadAllDonation();
+            dtpDate.setValue(LocalDate.now());
+        } catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+        cmbType.getItems().addAll("A+","A-","B+","B-","AB+","AB-","O+","O-");
+        cmbType.setValue("O+");
     }
     @FXML
     void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String neeReq = txtNeeReq.getText();
-        String blood_bag_id = txtBloodBagid.getText();
+        String blood_bag_id = txtBbid.getText();
         String needer_id = String.valueOf(cmbNeederid.getValue());
         String date = String.valueOf(dtpDate.getValue());
         String donation_id = String.valueOf(cmbDonationid.getValue());
         String amount = txtAmount.getText();
-        String type = txtType.getText();
+        String type = String.valueOf(cmbType.getValue());
         String exdate = String.valueOf(dtpExdate.getValue());
 
         boolean isNeederRequestValidated  = validateNeederRequest();
@@ -86,7 +94,8 @@ public class NeederRequestController {
 
     private void clearFields() {
         txtNeeReq.setText("");
-        txtBloodBagid.setText("");
+        txtBbid.setText("");
+        cmbType.getItems().clear();
         cmbNeederid.getItems().clear();
         cmbDonationid.getItems().clear();
         dtpDate.setValue(null);
@@ -131,50 +140,12 @@ public class NeederRequestController {
         return true;
     }
 
-    private void autoGenerateRequestId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        ResultSet resultSet = connection.prepareStatement("SELECT Request_id FROM needer_request ORDER BY Request_id DESC LIMIT 1").executeQuery();
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("R");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtNeeReq.setText("R00" + id);
-            } else if (id < 100) {
-                txtNeeReq.setText("R0" + id);
-            } else {
-                txtNeeReq.setText("R" + id);
-            }
-        } else {
-            txtNeeReq.setText("R001");
-        }
+    private void autoGenerateRequestId() throws SQLException, ClassNotFoundException {
+       txtNeeReq.setText(neederRequestBO.generateNeedrRequwst());
     }
 
-    private void autoGenerateBloodBagId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        ResultSet resultSet = connection.prepareStatement("SELECT BloodBag_id FROM blood_inventory ORDER BY BloodbBag_id DESC LIMIT 1").executeQuery();
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("B");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtBloodBagid.setText("B00" + id);
-            } else if (id < 100) {
-                txtBloodBagid.setText("B0" + id);
-            } else {
-                txtBloodBagid.setText("B" + id);
-            }
-        } else {
-            txtBloodBagid.setText("B001");
-        }
+    private void autoGenerateBloodBagId() throws SQLException, ClassNotFoundException {
+        txtBbid.setText(bloodInventoryBO.generateBloodBagId());
     }
 }
 

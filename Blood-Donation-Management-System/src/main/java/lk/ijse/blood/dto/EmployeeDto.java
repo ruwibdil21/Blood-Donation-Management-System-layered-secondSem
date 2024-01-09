@@ -13,8 +13,8 @@ public class EmployeeDto {
     private String user_id;
     private String Name;
     private String Address;
-    private  String Role;
-    private Date DOB;
+    private String Role;
+    private String DOB;
 
 
 }

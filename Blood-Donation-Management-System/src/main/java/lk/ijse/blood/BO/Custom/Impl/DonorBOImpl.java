@@ -1,8 +1,8 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.DonorBO;
-import lk.ijse.blood.DAO.Custom.DonorDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.DonorBO;
+import lk.ijse.blood.dao.Custom.DonorDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.entity.Donor;
 
@@ -32,8 +32,14 @@ public class DonorBOImpl implements DonorBO {
     @Override
     public DonorDto searchDonor(String id) throws SQLException, ClassNotFoundException {
         Donor donor =donorDAO.search(id);
-        DonorDto donorDto = new DonorDto(donor.getD_id(), donor.getFirstName(), donor.getLastName(),donor.getType(),donor.getDob(),donor.getTel(),donor.getLastDate());
-        return donorDto;
+        return new DonorDto(
+                donor.getD_id(),
+                donor.getFirstName(),
+                donor.getLastName(),
+                donor.getType(),
+                donor.getDob(),
+                donor.getTel(),
+                donor.getLastDate());
     }
 
     @Override

@@ -1,9 +1,6 @@
-package lk.ijse.blood.DAO.Custom;
+package lk.ijse.blood.dao.Custom;
 
-import lk.ijse.blood.DAO.CrudDAO;
-import lk.ijse.blood.dto.BloodInventoryDto;
-import lk.ijse.blood.dto.NeederRequestDto;
-import lk.ijse.blood.dto.RequestDetailsDto;
+import lk.ijse.blood.dao.CrudDAO;
 import lk.ijse.blood.entity.BloodInventory;
 import lk.ijse.blood.entity.NeederRequest;
 import lk.ijse.blood.entity.RequestDetails;

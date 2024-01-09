@@ -52,9 +52,9 @@ public class  DashboardFormController {
 
     @FXML
     void btnEmployeeOnAction(ActionEvent event) throws IOException {
-       bodyPane.getChildren().clear();
+        bodyPane.getChildren().clear();
         try {
-            AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/view/employee_form.fxml")));
+            AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/employee_form.fxml"));
             bodyPane.getChildren().add(anchorPane);
         } catch (IOException e) {
             System.out.println(e.getMessage());

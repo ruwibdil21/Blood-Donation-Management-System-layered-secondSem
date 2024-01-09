@@ -1,8 +1,8 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.SalaryBO;
-import lk.ijse.blood.DAO.Custom.SalaryDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.SalaryBO;
+import lk.ijse.blood.dao.Custom.SalaryDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.SalaryDto;
 import lk.ijse.blood.entity.Salary;
 

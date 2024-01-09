@@ -12,9 +12,5 @@ import java.sql.Date;
 public class OrderDetailsTm {
     private String Order_id;
     private String Med_id;
-    private String sup_id;
-    private Integer Amount;
-    private String Blood_type;
-    private java.sql.Date Date;
     private String Description;
 }

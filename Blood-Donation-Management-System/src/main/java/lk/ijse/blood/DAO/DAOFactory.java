@@ -1,20 +1,17 @@
-package lk.ijse.blood.DAO;
+package lk.ijse.blood.dao;
 
-import lk.ijse.blood.DAO.Custom.Impl.*;
+import lk.ijse.blood.dao.Custom.Impl.*;
 
 
 public class DAOFactory {
     private static DAOFactory daoFactory;
-
     private DAOFactory(){}
 
     public static DAOFactory getDaoFactory(){
-
         return daoFactory==null? new DAOFactory():daoFactory;
     }
 
     public enum DAOTypes{
-
         ADMIN,ATTENDANCE,BLOODINVENTORY,DONATION,DONOR,EMPLOYEE,INVENTORY,NEEDER,NEEDERREQUEST,ORDERDETAILS,REQUESTDETAILS,SALARY,SUPPLIER,SUPPLIERORDER
 
     }
@@ -40,7 +37,7 @@ public class DAOFactory {
             case NEEDERREQUEST:
                 return new NeederReuestDAOImpl();
             case ORDERDETAILS:
-                return new RequestDetailsDAOImpl();
+                return new OrderDetailsDAOImpl();
             case REQUESTDETAILS:
                 return new RequestDetailsDAOImpl();
             case SALARY:
@@ -48,7 +45,7 @@ public class DAOFactory {
             case SUPPLIER:
                 return new SupplierDAOImpl();
             case SUPPLIERORDER:
-                return new SupplierDAOImpl();
+                return new SupplierOrderDAOImpl();
             default:
                 return null;
         }

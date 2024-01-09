@@ -1,4 +1,4 @@
-package lk.ijse.blood.DAO;
+package lk.ijse.blood.dao;
 
 public interface SuperDAO {
 }

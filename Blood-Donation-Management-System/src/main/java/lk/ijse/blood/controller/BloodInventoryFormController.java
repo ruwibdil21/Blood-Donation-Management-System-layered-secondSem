@@ -1,4 +1,5 @@
 package lk.ijse.blood.controller;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -6,23 +7,24 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.blood.BO.Custom.BloodInventoryBO;
-import lk.ijse.blood.BO.Custom.Impl.BloodInventoryBOImpl;
+import lk.ijse.blood.bo.Custom.BloodInventoryBO;
+import lk.ijse.blood.bo.Custom.DonationBO;
+import lk.ijse.blood.bo.Custom.Impl.BloodInventoryBOImpl;
+import lk.ijse.blood.bo.Custom.Impl.DonationBOImpl;
 import lk.ijse.blood.db.DbConnection;
 import lk.ijse.blood.dto.BloodInventoryDto;
+import lk.ijse.blood.dto.DonationDto;
 import lk.ijse.blood.dto.tm.BloodInventoryTm;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class BloodInventoryFormController {
-
     public AnchorPane inventoryPane;
     public TextField txtBloodBag_id;
-    public TextField txtDonation_id;
-    public TextField txtBlood_Type;
     public DatePicker txtDonation_Date;
     public DatePicker txtEx_Date;
     public TableView tblBlood_Inventory;
@@ -30,19 +32,26 @@ public class BloodInventoryFormController {
     public TableColumn colDonation_id;
     public TableColumn colEx_Date;
     public TableColumn colBlood_Type;
+    public ChoiceBox cmbType;
+    public ComboBox cmbDId;
     @FXML
     private TableColumn<?, ?> colDonationDate;
 
     BloodInventoryBO bloodInventoryBO = new BloodInventoryBOImpl();
+    DonationBO donationBO = new DonationBOImpl();
 
-    public void initialize() throws ClassNotFoundException {
-        loadAllBloodInvenorys();
-        setCellValueFactory();
+    public void initialize() {
         try {
+            loadAllBloodInvenorys();
+            setCellValueFactory();
             autoGenarateId();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            loadAllDonation();
+        } catch (SQLException | ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+        cmbType.getItems().addAll("A+","A-","B+","B-","AB+","AB-","O+","O-");
+        cmbType.setValue("O+");
+        txtDonation_Date.setValue(LocalDate.now());
     }
     private void setCellValueFactory() {
         colBloodBag_id.setCellValueFactory(new PropertyValueFactory<>("bloodBagId"));
@@ -52,9 +61,22 @@ public class BloodInventoryFormController {
         colBlood_Type.setCellValueFactory(new PropertyValueFactory<>("blood_type"));
     }
 
+    private void loadAllDonation() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
+        try {
+            List<DonationDto> doList = donationBO.loadAllDonation();
+
+            for (DonationDto donationDto  : doList) {
+                obList.add(donationDto.getDo_id());
+            }
+            cmbDId.setItems(obList);
+        } catch (SQLException | ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
+
     public void loadAllBloodInvenorys() throws ClassNotFoundException {
         ObservableList<BloodInventoryTm> obList = FXCollections.observableArrayList();
-
         try{
             List<BloodInventoryDto> dtoList = bloodInventoryBO.loadAllBloodInventoy();
 
@@ -85,11 +107,11 @@ public class BloodInventoryFormController {
                 boolean isDeleted = bloodInventoryBO.deleteBloodInventory(bloodBag_id);
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Blood Inventory Delete Succesfull!!!").show();
-                    clearFields();
+                    initialize();
                 }
             }else {
                 new Alert(Alert.AlertType.ERROR, "Blood Inventory Not Found!!!").show();
-                clearFields();
+                initialize();
             }
         } catch (SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -100,21 +122,18 @@ public class BloodInventoryFormController {
     @FXML
     public void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String bloodBagId = txtBloodBag_id.getText();
-        String donationId = txtDonation_id.getText();
+        String donationId = String.valueOf(cmbDId.getValue());
         String donationDate = String.valueOf(txtDonation_Date.getValue());
         String exDate = String.valueOf(txtEx_Date.getValue());
-        String bloodType = txtBlood_Type.getText();
-
-        boolean isBloodInventoryValidated = validateBloodInventory();
-        if (!isBloodInventoryValidated){return;}
-
+        String bloodType = String.valueOf(cmbType.getValue());
+        
         var dto = new BloodInventoryDto(bloodBagId,donationId,donationDate,exDate,bloodType);
 
         try {
             boolean isSaved = bloodInventoryBO.saveBloodInventory(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "BloodInventory Added Succesfull").show();
-                clearFields();
+                initialize();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -125,14 +144,10 @@ public class BloodInventoryFormController {
     @FXML
     public void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String bloodBagId = colBloodBag_id.getText();
-        String donationId = txtDonation_id.getText();
+        String donationId = String.valueOf(cmbDId.getValue());
         String donationDate = String.valueOf(txtDonation_Date.getValue());
         String exDate = String.valueOf(txtEx_Date.getValue());
-        String bloodType = colBlood_Type.getText();
-
-
-        boolean isBloodInventoryValidated = validateBloodInventory();
-        if (!isBloodInventoryValidated){return;}
+        String bloodType = String.valueOf(cmbType.getValue());;
 
         var dto = new BloodInventoryDto(bloodBagId,donationId,donationDate,exDate,bloodType);
 
@@ -140,52 +155,14 @@ public class BloodInventoryFormController {
             boolean isUpdated = bloodInventoryBO.updateBloodInventoy(dto);
             if(isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Blood Inventory Update Succesfull!!!").show();
-                clearFields();
+                initialize();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-    private void clearFields() {
-        txtBloodBag_id.setText("");
-        txtDonation_id.setText("");
-        txtBlood_Type.setText("");
-
-    }
-
-    private boolean validateBloodInventory() {
-        String bloodType = txtBlood_Type.getText();
-        boolean isBloodTypeValidated = Pattern.compile("(A|B|AB|O)[+-]").matcher(bloodType).matches();
-        if (!isBloodTypeValidated){
-            txtBlood_Type.requestFocus();
-        }
-
-        return true;
-        }
-
-    private void autoGenarateId() throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "SELECT BloodBag_id FROM blood_inventory ORDER BY BloodBag_id DESC LIMIT 1";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
-        boolean isExists = resultSet.next();
-
-        if (isExists) {
-            String old_id = resultSet.getString(1);
-            String[] split = old_id.split("BB");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            if (id < 10) {
-                txtBloodBag_id.setText("BB00" + id);
-            } else if (id < 100) {
-                txtBloodBag_id.setText("BB0" + id);
-            } else {
-                txtBloodBag_id.setText("BB" + id);
-            }
-        } else {
-            txtBloodBag_id.setText("BB001");
-        }
+    private void autoGenarateId() throws SQLException, ClassNotFoundException {
+        txtBloodBag_id.setText(bloodInventoryBO.generateBloodBagId());
     }
 }
 

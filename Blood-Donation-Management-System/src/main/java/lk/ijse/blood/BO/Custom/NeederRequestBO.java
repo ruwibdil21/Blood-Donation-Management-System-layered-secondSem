@@ -1,9 +1,7 @@
-package lk.ijse.blood.BO.Custom;
+package lk.ijse.blood.bo.Custom;
 
-import lk.ijse.blood.BO.SuperBO;
-import lk.ijse.blood.dto.BloodInventoryDto;
+import lk.ijse.blood.bo.SuperBO;
 import lk.ijse.blood.dto.NeederRequestDto;
-import lk.ijse.blood.dto.RequestDetailsDto;
 import lk.ijse.blood.entity.BloodInventory;
 import lk.ijse.blood.entity.NeederRequest;
 import lk.ijse.blood.entity.RequestDetails;

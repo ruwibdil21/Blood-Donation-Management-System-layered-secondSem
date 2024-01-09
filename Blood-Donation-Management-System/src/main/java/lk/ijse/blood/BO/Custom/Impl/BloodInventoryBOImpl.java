@@ -1,9 +1,8 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.BloodInventoryBO;
-import lk.ijse.blood.DAO.Custom.BloodInventoryDAO;
-import lk.ijse.blood.DAO.Custom.Impl.BloodInventoryDAOImpl;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.BloodInventoryBO;
+import lk.ijse.blood.dao.Custom.BloodInventoryDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.entity.BloodInventory;
 
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BloodInventoryBOImpl implements BloodInventoryBO {
-
     BloodInventoryDAO bloodInventoryDAO = (BloodInventoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BLOODINVENTORY);
     @Override
     public List<BloodInventoryDto> loadAllBloodInventoy() throws SQLException, ClassNotFoundException {

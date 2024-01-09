@@ -1,8 +1,7 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.BloodInventoryDAO;
+import lk.ijse.blood.dao.Custom.BloodInventoryDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.BloodInventoryDto;
 import lk.ijse.blood.entity.BloodInventory;
 
 import java.sql.ResultSet;
@@ -68,6 +67,14 @@ public class BloodInventoryDAOImpl implements BloodInventoryDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT BloodBag_id FROM blood_inventory ORDER BY BloodBag_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("BloodBag_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newInventoryId = Integer.parseInt(numericPart) + 1;
+            return String.format("B%03d", newInventoryId);
+        } else {
+            return "B001";
+        }
     }
 }

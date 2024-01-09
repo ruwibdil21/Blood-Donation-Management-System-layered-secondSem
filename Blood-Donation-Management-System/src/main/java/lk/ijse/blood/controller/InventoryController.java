@@ -9,8 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.blood.BO.Custom.Impl.InventoryBOImpl;
-import lk.ijse.blood.BO.Custom.InventoryBO;
+import lk.ijse.blood.bo.Custom.Impl.InventoryBOImpl;
+import lk.ijse.blood.bo.Custom.InventoryBO;
 import lk.ijse.blood.dto.InventoryDto;
 import lk.ijse.blood.dto.tm.InventoryTm;
 
@@ -18,11 +18,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class InventoryController {
-    @FXML
-    private TextField txtBloodType;
+    public TableView tblMedicalInventory;
+    public ChoiceBox cmbType;
 
     @FXML
     private DatePicker txtDate;
@@ -46,21 +45,27 @@ public class InventoryController {
 
     InventoryBO inventoryBO = new InventoryBOImpl();
 
-    public void initialize() throws SQLException, ClassNotFoundException {
-        loadAllInventories();
-        setCellValueFactory();
+    public void initialize() {
+        try {
+            autoGenerateId();
+            loadAllInventories();
+            setCellValueFactory();
+            txtDate.setValue(LocalDate.now());
+        } catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+        cmbType.getItems().addAll("A+","A-","B+","B-","AB+","AB-","O+","O-");
+        cmbType.setValue("O+");
     }
 
     private void setCellValueFactory() {
         colMedicalId.setCellValueFactory(new PropertyValueFactory<>("medical_id"));
-        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colBloodType.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
     }
 
-    public void loadAllInventories() throws SQLException, ClassNotFoundException {
-
+    public void loadAllInventories() {
         ObservableList<InventoryTm> obList = FXCollections.observableArrayList();
-
         try {
             List<InventoryDto> dtoList =inventoryBO.loadAllInventory();
 
@@ -71,8 +76,8 @@ public class InventoryController {
                         dto.getBloodType()
                 ));
             }
-            tblInventory.setItems(obList);
-        } catch (SQLException e) {
+            tblMedicalInventory.setItems(obList);
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -91,7 +96,7 @@ public class InventoryController {
     @FXML
     void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String med_id = txtMedicalId.getText();
-        String bloodType = txtBloodType.getText();
+        String bloodType = String.valueOf(cmbType.getValue());
         String date = String.valueOf(txtDate.getValue());
 
         if (med_id.isEmpty() || bloodType.isEmpty() || date.isEmpty()) {
@@ -104,24 +109,18 @@ public class InventoryController {
             boolean isSaved = inventoryBO.saveInventory(dto);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Inventory Added Succesfull").show();
-                clearFields();
+                initialize();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 
-    private void clearFields() {
-        txtMedicalId.setText("");
-        txtBloodType.setText("");
-        txtDate.setValue(LocalDate.parse(""));
-    }
-
 
     @FXML
     private void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String medical_id = txtMedicalId.getText();
-        String blood_type = txtBloodType.getText();
+        String blood_type = String.valueOf(cmbType.getValue());
         String date = String.valueOf(txtDate.getValue());
 
 
@@ -134,32 +133,15 @@ public class InventoryController {
             boolean isUpdated = inventoryBO.updateInventory(dto);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Inventory Update Succesfull!!!").show();
-                clearFields();
+                initialize();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 
-
-       /* private boolean validateMedicalInventory();
-        String medicalId = txtMedicalId.getText();
-        boolean isMedicalIdValidated = Pattern.compile("^(M)[0-9]{1,3}$").matcher(medicalId).matches();
-        if (!isMedicalIdValidated) {
-            txtMedicalId.requestFocus();
-        }
-
-        String Date = txtDate.getText();
-        boolean isDateValidated = Pattern.compile("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$\n").matcher(Date).matches();
-        if (!isDateValidated) {
-            txtDate.requestFocus();
-        }
-
-        String bloodType = txtBloodType.getText();
-        boolean isBloodTypeValidated = Pattern.compile("(A|B|AB|O)[+-]").matcher(bloodType).matches();
-        if (!isBloodTypeValidated) {
-            txtBloodType.requestFocus();
-        }*/
-
+    private void autoGenerateId() throws ClassNotFoundException, SQLException {
+        txtMedicalId.setText(inventoryBO.generateInventory());
     }
+}
 

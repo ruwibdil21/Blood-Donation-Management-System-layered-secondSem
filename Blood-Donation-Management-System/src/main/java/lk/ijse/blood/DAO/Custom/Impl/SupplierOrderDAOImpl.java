@@ -1,6 +1,6 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.SupplierOrderDAO;
+import lk.ijse.blood.dao.Custom.SupplierOrderDAO;
 import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.entity.SupplierOrders;
 import java.sql.ResultSet;
@@ -63,6 +63,14 @@ public class SupplierOrderDAOImpl implements SupplierOrderDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT SupOrder_id FROM supplier_orders ORDER BY SupOrder_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("SupOrder_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newSupOrId = Integer.parseInt(numericPart) + 1;
+            return String.format("Sup_Or%03d", newSupOrId);
+        } else {
+            return "Sup_Or001";
+        }
     }
 }

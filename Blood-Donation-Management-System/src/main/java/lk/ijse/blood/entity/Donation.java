@@ -13,7 +13,7 @@ import java.sql.Date;
 public class Donation {
     private String Do_id;
     private String D_id;
-    private Date date;
+    private String date;
     private String Blood_type;
     private String Hemoglobin_level;
 }

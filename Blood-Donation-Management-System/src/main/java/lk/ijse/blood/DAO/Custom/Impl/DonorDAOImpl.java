@@ -1,8 +1,7 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.DAO.Custom.DonorDAO;
+import lk.ijse.blood.dao.Custom.DonorDAO;
 import lk.ijse.blood.Util.SQLUtil;
-import lk.ijse.blood.dto.DonorDto;
 import lk.ijse.blood.entity.Donor;
 
 import java.sql.ResultSet;
@@ -70,8 +69,14 @@ public class DonorDAOImpl implements DonorDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT D_id FROM donor ORDER BY D_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("D_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newDonorId = Integer.parseInt(numericPart) + 1;
+            return String.format("D%03d", newDonorId);
+        } else {
+            return "D001";
+        }
     }
-
-
 }

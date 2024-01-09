@@ -1,8 +1,8 @@
-package lk.ijse.blood.BO.Custom.Impl;
+package lk.ijse.blood.bo.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.AdminBO;
-import lk.ijse.blood.DAO.Custom.AdminDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.bo.Custom.AdminBO;
+import lk.ijse.blood.dao.Custom.AdminDAO;
+import lk.ijse.blood.dao.DAOFactory;
 import lk.ijse.blood.dto.UserDto;
 import lk.ijse.blood.entity.User;
 
@@ -18,7 +18,10 @@ public class AdminBOImpl implements AdminBO {
         List<UserDto> userDtos = new ArrayList<>();
 
         for (User user : users){
-            userDtos.add(new UserDto(user.getUser_id(),user.getName(),user.getPassword()));
+            userDtos.add(new UserDto(
+                    user.getUser_id(),
+                    user.getName(),
+                    user.getPassword()));
         }
         return userDtos;
     }

@@ -1,15 +1,8 @@
-package lk.ijse.blood.DAO.Custom.Impl;
+package lk.ijse.blood.dao.Custom.Impl;
 
-import lk.ijse.blood.BO.Custom.BloodInventoryBO;
-import lk.ijse.blood.DAO.Custom.BloodInventoryDAO;
-import lk.ijse.blood.DAO.Custom.NeederRequestDAO;
-import lk.ijse.blood.DAO.Custom.RequestDetailsDAO;
-import lk.ijse.blood.DAO.DAOFactory;
+import lk.ijse.blood.dao.Custom.NeederRequestDAO;
 import lk.ijse.blood.Util.SQLUtil;
 import lk.ijse.blood.Util.TransactionUtil;
-import lk.ijse.blood.dto.BloodInventoryDto;
-import lk.ijse.blood.dto.NeederRequestDto;
-import lk.ijse.blood.dto.RequestDetailsDto;
 import lk.ijse.blood.entity.BloodInventory;
 import lk.ijse.blood.entity.NeederRequest;
 import lk.ijse.blood.entity.RequestDetails;
@@ -19,21 +12,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class NeederReuestDAOImpl implements NeederRequestDAO {
-
-    NeederRequestDAO neederRequestDAO = (NeederRequestDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.NEEDERREQUEST);
-
-    BloodInventoryDAO bloodInventoryDAO = (BloodInventoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BLOODINVENTORY);
-    RequestDetailsDAO requestDetailsDAO = (RequestDetailsDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.REQUESTDETAILS);
     public  boolean placeNeederRequest(NeederRequest neederRequestDto, BloodInventory bagdto, RequestDetails requestDetailsDto) throws SQLException, ClassNotFoundException {
         try {
             TransactionUtil.startTransaction();
-            boolean isNeederRequestSaved = neederRequestDAO.save(neederRequestDto);
+            boolean isNeederRequestSaved = new NeederReuestDAOImpl().save(neederRequestDto);
             if (isNeederRequestSaved) {
-                boolean isBloodInventorySaved = bloodInventoryDAO.save(bagdto);
+                boolean isBloodInventorySaved = new BloodInventoryDAOImpl().save(bagdto);
                 if (isBloodInventorySaved) {
-                    boolean isrequestDetailsSaved = requestDetailsDAO.save(requestDetailsDto);
+                    boolean isrequestDetailsSaved = new RequestDetailsDAOImpl().save(requestDetailsDto);
                     if (isrequestDetailsSaved) {
                         return true;
                     }
@@ -71,7 +58,7 @@ public class NeederReuestDAOImpl implements NeederRequestDAO {
 
     @Override
     public NeederRequest search(String id) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet =SQLUtil.execute( "SELECT * FROM needer_Request WHERE NeeReq = ?",id);
+        ResultSet resultSet =SQLUtil.execute( "SELECT * FROM needer_Request WHERE request_id = ?",id);
 
         if (resultSet.next()) {
             return new NeederRequest(
@@ -101,6 +88,14 @@ public class NeederReuestDAOImpl implements NeederRequestDAO {
 
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet resultSet = SQLUtil.execute("SELECT Request_id FROM needer_request ORDER BY Request_id DESC LIMIT 1");
+        if (resultSet.next()) {
+            String id = resultSet.getString("Request_id");
+            String numericPart = id.replaceAll("\\D", "");
+            int newRequestId = Integer.parseInt(numericPart) + 1;
+            return String.format("R%03d", newRequestId);
+        } else {
+            return "R001";
+        }
     }
 }
